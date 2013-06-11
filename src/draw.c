@@ -1,6 +1,10 @@
 #include "draw.h"
 
-
+// VIC banks
+#define BANK0BASE 0
+#define BANK1BASE 16384
+#define BANK2BASE 32768
+#define BANK3BASE 49152
 
 void clearScreen(char textcolor) {
 	bordercolor(0);
@@ -121,14 +125,12 @@ void switchBank(char base) {
 	char c = *(int*)0xDD00; // CIA 2
 	c &= 252;
 	*(int*)0xDD00 = (c | (3 - base)); // switch VIC base
-	//vicbase = 16384 * base;
 }
 
 
 void showPicture(int imgdata) {
 	int i = 0;
 	int vicconf[3];
-	int base;
 
 	vicconf[0] = VIC.addr;
 	vicconf[1] = VIC.ctrl1;
@@ -136,13 +138,11 @@ void showPicture(int imgdata) {
 
 	VIC.spr_ena = 0;
 
-	base = 16384;
-
 	// 8000 bytes bitmap
-	memcpy((int*)(base + 8192), (int*)imgdata, 8000);
+	memcpy((int*)(BANK3BASE + 8192), (int*)imgdata, 8000);
 
 	// 1000 bytes char mem
-	memcpy((int*)(base + 0x0400), (int*)(imgdata + 8000), 1000);
+	memcpy((int*)(BANK3BASE + 0x0400), (int*)(imgdata + 8000), 1000);
 
 	// 1000 bytes color mem
 	memcpy((int*)(0xD800), (int*)(imgdata + 9000), 1000);
@@ -150,7 +150,8 @@ void showPicture(int imgdata) {
 	// 1 byte background color
 	bgcolor(*((int*)(imgdata + 10000)));
 
-	switchBank(1);
+	// now that we copied the bitmap data, switch bank
+	switchBank(3);
 
 	// multicolor on
 	// POKE 53265,PEEK(53265) OR 32 : POKE 53270,PEEK(53270) OR 16
@@ -162,7 +163,7 @@ void showPicture(int imgdata) {
 		if(!(PEEK(JOY2) & 0x1f & JOYFIRE)) break;		
 	}
 
-	// multicolor off
+	// put VIC back into previous state
 	VIC.addr = vicconf[0];
 	VIC.ctrl1 = vicconf[1];
 	VIC.ctrl2 = vicconf[2];
