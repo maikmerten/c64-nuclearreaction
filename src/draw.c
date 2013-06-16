@@ -1,10 +1,5 @@
 #include "draw.h"
 
-// VIC banks
-#define BANK0BASE 0
-#define BANK1BASE 16384
-#define BANK2BASE 32768
-#define BANK3BASE 49152
 
 void clearScreen(char textcolor) {
 	bordercolor(0);

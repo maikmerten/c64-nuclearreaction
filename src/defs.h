@@ -17,6 +17,12 @@
 #define TEXTBASE 0x0400
 #define COLORRAM 0xD800
 
+// VIC banks
+#define BANK0BASE 0
+#define BANK1BASE 16384
+#define BANK2BASE 32768
+#define BANK3BASE 49152
+
 // definitions of field screen position and color
 #define FIELDOFF 90
 #define FIELDCOLOR 11
