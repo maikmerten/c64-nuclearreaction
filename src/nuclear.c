@@ -8,11 +8,8 @@
 
 
 extern const char titlecard[]; // text.s
-extern const char rolling1[]; // text.s
-extern const char rolling2[]; // text.s
-extern const char rolling3[]; // text.s
-extern const char rolling4[]; // text.s
-const int rolling[4] = {(int)&rolling1, (int)&rolling2, (int)&rolling3, (int)&rolling4};
+
+unsigned char help;
 
 unsigned char field[SIZEX][SIZEY];
 unsigned char ki;
@@ -161,20 +158,54 @@ void gameloop() {
 }
 
 
+void showhelp() {
+	char joy,x,y;
+	FILE* f;
+	int i;
+
+	x = 0;
+	y = 0;
+
+	clearScreen(1);
+
+	f = fopen("readme", "r");
+
+	i = fgetc(f);
+	while(i != EOF) {
+		if(i != 0x0A) { // newline is unprintable
+			cputsxy(x++, y, (char*)&i);
+		} else {
+			x = 0;
+			++y;
+		}
+		i = fgetc(f);
+	}
+
+
+	fclose(f);
+
+	while(1) {
+		joy=PEEK(JOY2) & 0x1f;
+		if(!(joy & JOYFIRE)) break;
+	}
+
+}
+
+
 char gamemenu() {
 	char quit,joy,selected,wait,update;
 	char cnt = 0;
-	char roller = 0;
+
 	signed char item = 0;
 	update = 1;
 	selected = 0;
 
-	// enable charset 1
-	*((char*)53272) = 21;
+	// enable charset 2
+	*((char*)53272) = 23;
 
 	clearScreen(1);
 	textcolor(1);
-	cputsxy(4, 0, "=== nuclear reaction 2100 ===");
+	cputsxy(4, 0, "--- Nuclear Reaction 2100 ---");
 	
 	while(!selected) {
 		joy=PEEK(JOY2) & 0x1f;
@@ -187,15 +218,16 @@ char gamemenu() {
 			update = 1;
 		}
 
-		item = (item > 2) ? 2 : item;
+		item = (item > 3) ? 3 : item;
 		item = (item < 0) ? 0 : item;
 
 		if(update) {
 			textcolor(15);
-			cputsxy(3, 4, "   match against the computer");
-			cputsxy(3, 7, "   match between two humans");
-			cputsxy(3, 10, "   quit");
-			cputsxy(4, 3 * item + 4, "Q");
+			cputsxy(3, 4, "   Match against the computer");
+			cputsxy(3, 7, "   Match between two humans");
+			cputsxy(3, 10, "   Help");
+			cputsxy(3, 13, "   Quit");
+			cputsxy(4, 3 * item + 4, "*");
 			update = 0;
 		}
 			
@@ -204,21 +236,13 @@ char gamemenu() {
 			WAIT_WHILE_RASTERLINE_LOW
 			joy=PEEK(JOY2) & 0x1f;
 			selected = (!(joy & JOYFIRE)) ? 1 : 0;
-
-			if(++cnt == 0) {
-				++roller;
-				roller = (roller > 3) ? 0 : roller;
-			}
-
-			textcolor(12);
-			cputsxy(0, 20, (char*)rolling[roller]);
-
 			WAIT_WHILE_RASTERLINE_HIGH
 		}
 	};
 
 	ki = (item == 0) ? 1 : 0;
-	quit = (item == 2) ? 1 : 0;
+	help = (item == 2) ? 1 : 0;
+	quit = (item == 3) ? 1 : 0;
 
 	return quit;
 }
@@ -232,8 +256,12 @@ int main(void) {
 
 	while(1) {
 		if(gamemenu()) break;
-		gameloop();
-		VIC.spr_ena = 0;
+		if(help) {
+			showhelp();
+		} else {
+			gameloop();
+			VIC.spr_ena = 0;
+		}
 	}
 
 	return EXIT_SUCCESS;
