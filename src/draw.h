@@ -8,7 +8,7 @@
 
 #include "defs.h"
 #include "field.h"
-
+#include "input.h"
 
 extern unsigned char field[SIZEX][SIZEY];
 extern unsigned char playercolors[3];

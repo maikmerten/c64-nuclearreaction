@@ -5,14 +5,6 @@
 #define WAIT_WHILE_RASTERLINE_LOW	while (!(VIC.ctrl1 & 0x80)) {};
 #define WAIT_WHILE_RASTERLINE_HIGH	while (VIC.ctrl1 & 0x80) {};
 
-// joystick defs
-#define JOY2  0xDC00
-#define JOYUP  0x01
-#define JOYDOWN  0x02
-#define JOYLEFT  0x04
-#define JOYRIGHT  0x08
-#define JOYFIRE  0x10
-
 // memory locations
 #define TEXTBASE 0x0400
 #define COLORRAM 0xD800

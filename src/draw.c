@@ -155,7 +155,7 @@ void showPicture(int imgdata) {
 	VIC.ctrl2 = VIC.ctrl2 | 16;
 
 	while(1){
-		if(!(PEEK(JOY2) & 0x1f & JOYFIRE)) break;		
+		if(isInputAction()) break;		
 	}
 
 	// put VIC back into previous state

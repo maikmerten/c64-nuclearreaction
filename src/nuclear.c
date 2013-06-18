@@ -5,6 +5,7 @@
 #include "defs.h"
 #include "draw.h"
 #include "ai.h"
+#include "input.h"
 
 
 extern const char titlecard[]; // text.s
@@ -54,7 +55,7 @@ void printHUD(char player) {
 
 
 void gameloop() {
-	char joy,fire,wait,owner,player,updateHUD,aix,aiy;
+	char fire,wait,owner,player,updateHUD,aix,aiy;
 	int airesult;
 
 	// enable charset 1
@@ -76,13 +77,12 @@ void gameloop() {
 	while(!winner) {
 		WAIT_WHILE_RASTERLINE_LOW
 
-		joy=PEEK(JOY2) & 0x1f;
 		setCellColor(FIELDCOLOR, posx, posy);
 
-		if (!(joy & JOYUP)) --posy;
-		if (!(joy & JOYDOWN)) ++posy;
-		if (!(joy & JOYLEFT)) --posx;
-		if (!(joy & JOYRIGHT)) ++posx;
+		if (isInputUp()) --posy;
+		if (isInputDown()) ++posy;
+		if (isInputLeft()) --posx;
+		if (isInputRight()) ++posx;
 
 		posx = posx < 0 ? 0 : posx;
 		posx = posx >= SIZEX ? SIZEX - 1 : posx;
@@ -96,7 +96,7 @@ void gameloop() {
 
 		if(player == 1 || !ki) {
 			// puny human
-			if (!(joy & JOYFIRE)) fire = 1;
+			if (isInputAction()) fire = 1;
 			
 			if(fire && (owner == 0 || owner == player)) {
 				putAtom(field, player, posx, posy, 1);
@@ -145,11 +145,11 @@ void gameloop() {
 
 	wait = 0;
 	cputsxy(8, 24, "press fire to continue");
+
+	fire = 0;
 	do {
 		WAIT_WHILE_RASTERLINE_HIGH
-		joy=PEEK(JOY2) & 0x1f;
-		fire = 0;
-		if (!(joy & JOYFIRE)) fire = 1;
+		fire = isInputAction();
 		VIC.spr_pos[0].y = (SPRITE_PLAYER_Y + (wait >> 7));
 		++wait;
 		WAIT_WHILE_RASTERLINE_HIGH
@@ -159,7 +159,7 @@ void gameloop() {
 
 
 void showhelp() {
-	char joy,x,y;
+	char x,y;
 	FILE* f;
 	int i;
 
@@ -185,15 +185,14 @@ void showhelp() {
 	fclose(f);
 
 	while(1) {
-		joy=PEEK(JOY2) & 0x1f;
-		if(!(joy & JOYFIRE)) break;
+		if(isInputAction()) break;
 	}
 
 }
 
 
 char gamemenu() {
-	char quit,joy,selected,wait,update;
+	char quit,selected,wait,update;
 	char cnt = 0;
 
 	signed char item = 0;
@@ -208,12 +207,11 @@ char gamemenu() {
 	cputsxy(4, 0, "--- Nuclear Reaction 2100 ---");
 	
 	while(!selected) {
-		joy=PEEK(JOY2) & 0x1f;
-		if (!(joy & JOYUP)) {
+		if (isInputUp()) {
 			--item;
 			update = 1;
 		}
-		if (!(joy & JOYDOWN)) {
+		if (isInputDown()) {
 			++item;
 			update = 1;
 		}
@@ -234,8 +232,7 @@ char gamemenu() {
 
 		for(wait = 8; wait > 0; --wait) {
 			WAIT_WHILE_RASTERLINE_LOW
-			joy=PEEK(JOY2) & 0x1f;
-			selected = (!(joy & JOYFIRE)) ? 1 : 0;
+			selected = (isInputAction()) ? 1 : 0;
 			WAIT_WHILE_RASTERLINE_HIGH
 		}
 	};
