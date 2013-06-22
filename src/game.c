@@ -4,11 +4,11 @@
 unsigned char field[SIZEX][SIZEY];
 unsigned char ki;
 unsigned char playercolors[3] = {0, 10, 14 };
+unsigned char player;
 unsigned char playerplayed[3];
 unsigned char winner;
 unsigned char move;
-signed char posx,posy; // signed for simple detection of underflow
-
+unsigned char updateHUD;
 
 char checkWinner(char f[SIZEX][SIZEY]) {
 	char p1,p2,winner;
@@ -24,9 +24,21 @@ char checkWinner(char f[SIZEX][SIZEY]) {
 	return winner;
 }
 
+void doMove(signed char x, signed char y,) {
+	highlightCell(x,y);
+	putAtom(field, player, x, y, 1);
+	playerplayed[player] = 1;
+	react(field, 1);
+	winner = checkWinner(field);
+	player = (player == 1) ? 2 : 1;
+	++move;
+	updateHUD = 1;
+}
+
 
 void gameloop() {
-	char fire,wait,owner,player,updateHUD,aix,aiy;
+	signed char posx,posy; // signed for simple detection of underflow
+	char fire,wait,owner;
 	int airesult;
 
 	// enable charset 1
@@ -70,24 +82,12 @@ void gameloop() {
 			if (isInputAction()) fire = 1;
 			
 			if(fire && (owner == 0 || owner == player)) {
-				putAtom(field, player, posx, posy, 1);
-				react(field, 1);
-				winner = checkWinner(field);
-				player = (player == 1) ? 2 : 1;
-				++move;
-				updateHUD = 1;
+				doMove(posx, posy);
 			}
 		} else {
 			// mighty computer
 			airesult = thinkAI();
-			aix = airesult >> 8;
-			aiy = airesult & 0xFF;
-			putAtom(field, player, aix, aiy, 1);
-			react(field, 1);
-			winner = checkWinner(field);
-			player = (player == 1) ? 2 : 1;
-			updateHUD = 1;
-			++move;
+			doMove((char)(airesult >> 8),(char)(airesult & 0xFF));
 		}
 
 		if(kbhit()) {

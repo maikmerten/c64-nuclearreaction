@@ -114,6 +114,5 @@ void putAtom(char f[SIZEX][SIZEY], char p, char x, char y, char draw) {
 	setAtoms(f, atoms, x, y);
 	setOwner(f, p, x, y);
 	if(draw) drawAtoms(x, y);
-	playerplayed[p] = 1;
 }
 

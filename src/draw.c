@@ -83,6 +83,25 @@ void setCellColor(char color, char x, char y) {
 	*((char*)pos++) = color;
 }
 
+void highlightCell(char x, char y) {
+	char i,j;	
+
+	for(i = 3; i > 0; --i) {
+		setCellColor(1, x, y);
+		for(j = 4; j > 0; --j) {
+			WAIT_WHILE_RASTERLINE_LOW
+			WAIT_WHILE_RASTERLINE_HIGH
+		}
+		setCellColor(FIELDCOLOR, x, y);
+		for(j = 4; j > 0; --j) {
+			WAIT_WHILE_RASTERLINE_LOW
+			WAIT_WHILE_RASTERLINE_HIGH
+		}
+	}
+
+}
+
+
 void drawAtoms(char x, char y) {
 	char count = getAtoms(field, x, y);
 	char color = playercolors[getOwner(field, x, y)];

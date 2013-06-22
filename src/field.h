@@ -4,7 +4,8 @@
 #include "defs.h"
 #include "draw.h"
 
-extern unsigned char playerplayed[3];
+
+extern unsigned char field[SIZEX][SIZEY];
 
 void setAtoms(char f[SIZEX][SIZEY], char atoms, char x, char y);
 char getAtoms(char f[SIZEX][SIZEY], char x, char y);
