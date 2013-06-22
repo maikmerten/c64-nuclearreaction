@@ -187,3 +187,16 @@ void displayPlayerSprite(char player) {
 	VIC.spr_hi_x = xpos > 255 ? 1 : 0;
 }
 
+void printHUD(char player, char color, char move, char ki) {
+	char buf[9];
+	displayPlayerSprite(player);
+	textcolor(color);
+	if(player == 1) cputsxy(8,0, "active player: player 1");
+	else {
+		if(ki) cputsxy(8,0, "computer is thinking...   ");
+		else cputsxy(8,0, "active player: player 2");
+	}
+	sprintf(buf, "move  %-3i", move);
+	cputsxy(16,20, buf);
+}
+

@@ -2,6 +2,7 @@
 #define __draw_h
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <conio.h>
 #include <string.h>
 #include <peekpoke.h>
@@ -25,5 +26,6 @@ void drawField();
 void switchBank(char base);
 void showPicture(int imgdata);
 void displayPlayerSprite(char player);
+void printHUD(char player, char color, char move, char ki);
 
 #endif

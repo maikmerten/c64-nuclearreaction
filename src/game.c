@@ -25,21 +25,6 @@ char checkWinner(char f[SIZEX][SIZEY]) {
 }
 
 
-void printHUD(char player) {
-	char buf[9];
-	char color = playercolors[player];
-	displayPlayerSprite(player);
-	textcolor(color);
-	if(player == 1) cputsxy(8,0, "active player: player 1");
-	else {
-		if(ki) cputsxy(8,0, "computer is thinking...   ");
-		else cputsxy(8,0, "active player: player 2");
-	}
-	sprintf(buf, "move  %-3i", move);
-	cputsxy(16,20, buf);
-}
-
-
 void gameloop() {
 	char fire,wait,owner,player,updateHUD,aix,aiy;
 	int airesult;
@@ -110,7 +95,7 @@ void gameloop() {
 		}
 
 		if(!winner && updateHUD) {
-			printHUD(player);
+			printHUD(player, playercolors[player], move, ki);
 			updateHUD = 0;
 		}
 
