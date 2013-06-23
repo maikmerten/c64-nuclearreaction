@@ -7,6 +7,7 @@
 #include "ai.h"
 #include "input.h"
 #include "game.h"
+#include "petscii.h"
 
 
 extern const char titlecard[]; // text.s
@@ -55,13 +56,21 @@ char gamemenu() {
 	update = 1;
 	selected = 0;
 
-	// enable charset 2
-	*((char*)53272) = 23;
+	// enable charset 1
+	*((char*)53272) = 21;
 
 	clearScreen(1);
+
+	fillRect(0,0,40,1,CHAR_FULL,5);
+	fillRect(0,1,1,23,CHAR_FULL,5);
+	fillRect(39,1,1,23,CHAR_FULL,5);
+	fillRect(0,24,40,1,CHAR_FULL,5);
+
 	textcolor(1);
-	cputsxy(4, 0, "--- Nuclear Reaction 2100 ---");
+	cputsxy(8, 0, " nuclear reaction 2100 ");
 	
+
+
 	while(!selected) {
 		if (isInputUp()) {
 			--item;
@@ -77,11 +86,11 @@ char gamemenu() {
 
 		if(update) {
 			textcolor(15);
-			cputsxy(3, 4, "   Match against the computer");
-			cputsxy(3, 7, "   Match between two humans");
-			cputsxy(3, 10, "   Help");
-			cputsxy(3, 13, "   Quit");
-			cputsxy(4, 3 * item + 4, "*");
+			cputsxy(3, 4, "   match against the computer");
+			cputsxy(3, 7, "   match between two humans");
+			cputsxy(3, 10, "   help");
+			cputsxy(3, 13, "   quit");
+			cputsxy(4, 3 * item + 4, "Q");
 			update = 0;
 		}
 			
