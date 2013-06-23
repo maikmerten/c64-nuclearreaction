@@ -20,6 +20,9 @@ void showhelp() {
 	FILE* f;
 	int i;
 
+	// enable charset 2
+	*((char*)53272) = 23;
+
 	x = 0;
 	y = 0;
 
