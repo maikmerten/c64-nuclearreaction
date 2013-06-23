@@ -15,6 +15,14 @@
 #define CHAR_COR_BL 74
 #define CHAR_COR_BR 75
 
+// chipped corners
+// round corners
+#define CHAR_CHIP_TL 233
+#define CHAR_CHIP_TR 223
+#define CHAR_CHIP_BL 95
+#define CHAR_CHIP_BR 105
+
+
 // crossings
 #define CHAR_CROSS 91
 #define CHAR_CROSS_L 107

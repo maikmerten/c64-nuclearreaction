@@ -64,15 +64,18 @@ char gamemenu() {
 
 	clearScreen(1);
 
-	fillRect(0,0,40,1,CHAR_FULL,5);
-	fillRect(0,1,1,23,CHAR_FULL,5);
-	fillRect(39,1,1,23,CHAR_FULL,5);
-	fillRect(0,24,40,1,CHAR_FULL,5);
+	// draw menu border
+	fillRect(0,0,40,1,CHAR_FULL,14);
+	fillRect(0,1,1,23,CHAR_FULL,14);
+	fillRect(39,1,1,23,CHAR_FULL,14);
+	fillRect(0,24,40,1,CHAR_FULL,14);
+	fillRect(0,0,1,1,CHAR_CHIP_TL,14);
+	fillRect(39,0,1,1,CHAR_CHIP_TR,14);
+	fillRect(0,24,1,1,CHAR_CHIP_BL,14);
+	fillRect(39,24,1,1,CHAR_CHIP_BR,14);
 
-	textcolor(1);
+	textcolor(10);
 	cputsxy(8, 0, " nuclear reaction 2100 ");
-	
-
 
 	while(!selected) {
 		if (isInputUp()) {
@@ -93,6 +96,7 @@ char gamemenu() {
 			cputsxy(3, 7, "   match between two humans");
 			cputsxy(3, 10, "   help");
 			cputsxy(3, 13, "   quit");
+			textcolor(1);
 			cputsxy(4, 3 * item + 4, "Q");
 			update = 0;
 		}
