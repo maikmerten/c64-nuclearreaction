@@ -93,6 +93,7 @@ void react(char f[SIZEX][SIZEY], char draw) {
 			for(y = 0; y < SIZEY; ++y) {
 				count = getAtoms(f, x, y);
 				if(count > getCapacity(x, y)) {
+					if(draw) soundExplode();
 					player = getOwner(f, x, y);
 					stable = 0;
 					spreadAtoms(f, x, y, player, draw);

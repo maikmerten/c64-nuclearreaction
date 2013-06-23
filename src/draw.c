@@ -88,6 +88,7 @@ void highlightCell(char x, char y) {
 
 	for(i = 3; i > 0; --i) {
 		setCellColor(1, x, y);
+		soundBleep();
 		for(j = 4; j > 0; --j) {
 			WAIT_WHILE_RASTERLINE_LOW
 			WAIT_WHILE_RASTERLINE_HIGH
