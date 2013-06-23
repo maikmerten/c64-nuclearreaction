@@ -11,6 +11,7 @@
 #include "field.h"
 #include "input.h"
 #include "sound.h"
+#include "petscii.h"
 
 extern unsigned char playercolors[3];
 extern unsigned char ki;

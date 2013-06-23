@@ -19,27 +19,6 @@
 #define FIELDOFF 90
 #define FIELDCOLOR 11
 
-// characters 'empty' and 'atom'
-#define CHAR_SPACE 32
-#define CHAR_ATOM 81
-
-// round corners
-#define CHAR_COR_TL 85
-#define CHAR_COR_TR 73
-#define CHAR_COR_BL 74
-#define CHAR_COR_BR 75
-
-// crossings
-#define CHAR_CROSS 91
-#define CHAR_CROSS_L 107
-#define CHAR_CROSS_R 115
-#define CHAR_CROSS_T 114
-#define CHAR_CROSS_B 113
-
-// bars
-#define CHAR_HOR 67
-#define CHAR_VER 66
-
 
 // player number of AI
 #define PLAYERAI 2
