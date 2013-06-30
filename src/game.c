@@ -90,9 +90,7 @@ void gameloop() {
 			doMove((char)(airesult >> 8),(char)(airesult & 0xFF));
 		}
 
-		if(kbhit()) {
-			if(cgetc() == 57) break;
-		}
+		if(isInputExit()) break;
 
 		if(!winner && updateHUD) {
 			printHUD(player, playercolors[player], move, ki);

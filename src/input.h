@@ -22,6 +22,7 @@ char isInputDown();
 char isInputLeft();
 char isInputRight();
 char isInputAction();
+char isInputExit();
 
 
 #endif

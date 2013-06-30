@@ -33,3 +33,14 @@ char isInputRight() {
 char isInputAction() {
 	return readJoysticks(JOYFIRE);
 }
+
+char isInputExit() {
+	char c;
+	if(kbhit()) {
+		// check for escape key
+		if(cgetc() == 3) {
+			return 1;
+		}
+	}
+	return 0;
+}
