@@ -133,5 +133,11 @@ int main(void) {
 		}
 	}
 
+	// restore proper screen setup on exit
+	clearScreen(1);
+	bordercolor(14);
+	bgcolor(6);
+	textcolor(14);
+
 	return EXIT_SUCCESS;
 }
