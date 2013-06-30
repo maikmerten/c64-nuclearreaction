@@ -9,6 +9,7 @@
 #include "defs.h"
 
 // joystick defs
+#define JOY1  0xDC01
 #define JOY2  0xDC00
 #define JOYUP  0x01
 #define JOYDOWN  0x02

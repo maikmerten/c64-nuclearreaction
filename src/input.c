@@ -1,29 +1,32 @@
 #include "input.h"
 
+char readJoysticks(char mask) {
+	char joy = PEEK(JOY2) & 0x1f;
+	char result = (!(joy & mask));
+	joy = PEEK(JOY1) & 0x1f;
+	result |= (!(joy & mask));
+	return result;
+}
+
 
 char isInputUp() {
-	char joy = PEEK(JOY2) & 0x1f;
-	return (!(joy & JOYUP));
+	return readJoysticks(JOYUP);
 }
 
 char isInputDown() {
-	char joy = PEEK(JOY2) & 0x1f;
-	return (!(joy & JOYDOWN));
+	return readJoysticks(JOYDOWN);
 }
 
 
 char isInputLeft() {
-	char joy = PEEK(JOY2) & 0x1f;
-	return (!(joy & JOYLEFT));
+	return readJoysticks(JOYLEFT);
 }
 
 
 char isInputRight() {
-	char joy = PEEK(JOY2) & 0x1f;
-	return (!(joy & JOYRIGHT));
+	return readJoysticks(JOYRIGHT);
 }
 
 char isInputAction() {
-	char joy = PEEK(JOY2) & 0x1f;
-	return (!(joy & JOYFIRE));
+	return readJoysticks(JOYFIRE);
 }
