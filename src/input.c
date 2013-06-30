@@ -35,7 +35,6 @@ char isInputAction() {
 }
 
 char isInputExit() {
-	char c;
 	if(kbhit()) {
 		// check for escape key
 		if(cgetc() == 3) {
