@@ -1,4 +1,6 @@
 #include "field.h"
+#include "draw.h"
+#include "sound.h"
 
 
 void setAtoms(char f[SIZEX][SIZEY], char atoms, char x, char y) {

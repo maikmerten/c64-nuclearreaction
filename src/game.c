@@ -1,5 +1,8 @@
 #include "game.h"
-
+#include "ai.h"
+#include "draw.h"
+#include "field.h"
+#include "input.h"
 
 unsigned char field[SIZEX][SIZEY];
 unsigned char ki;

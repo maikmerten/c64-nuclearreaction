@@ -2,9 +2,6 @@
 #define __game_h
 
 
-#include "ai.h"
-#include "draw.h"
-
 
 void gameloop();
 

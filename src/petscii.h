@@ -16,7 +16,6 @@
 #define CHAR_COR_BR 75
 
 // chipped corners
-// round corners
 #define CHAR_CHIP_TL 233
 #define CHAR_CHIP_TR 223
 #define CHAR_CHIP_BL 95

@@ -1,6 +1,13 @@
 #ifndef __defs_h
 #define __defs_h
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <conio.h>
+#include <string.h>
+#include <peekpoke.h>
+#include <c64.h>
+
 // sync to screen helpers
 #define WAIT_WHILE_RASTERLINE_LOW	while (!(VIC.ctrl1 & 0x80)) {};
 #define WAIT_WHILE_RASTERLINE_HIGH	while (VIC.ctrl1 & 0x80) {};

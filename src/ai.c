@@ -1,4 +1,5 @@
 #include "ai.h"
+#include "field.h"
 
 unsigned char fieldAI[SIZEX][SIZEY];
 

@@ -1,11 +1,6 @@
 #ifndef __input_h
 #define __input_h
 
-#include <stdlib.h>
-#include <conio.h>
-#include <string.h>
-#include <peekpoke.h>
-
 #include "defs.h"
 
 // joystick defs

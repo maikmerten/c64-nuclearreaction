@@ -1,5 +1,8 @@
 #include "draw.h"
-
+#include "field.h"
+#include "input.h"
+#include "sound.h"
+#include "petscii.h"
 
 void clearScreen(char textcolor) {
 	bordercolor(0);

@@ -2,9 +2,6 @@
 #define __field_h
 
 #include "defs.h"
-#include "draw.h"
-#include "sound.h"
-
 
 extern unsigned char field[SIZEX][SIZEY];
 
