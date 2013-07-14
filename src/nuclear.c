@@ -12,6 +12,8 @@
 
 
 extern const char titlecard[]; // text.s
+extern void setupInterrupt(); // asm.s
+extern void disableInterrupt(); // asm.s
 
 unsigned char help;
 
@@ -22,7 +24,7 @@ void showhelp() {
 	int i;
 
 	// enable charset 2
-	*((char*)53272) = 23;
+	*((char*	)53272) = 23;
 
 	x = 0;
 	y = 0;
@@ -55,8 +57,8 @@ void showhelp() {
 char gamemenu() {
 	char quit,selected,wait,update;
 	char cnt = 0;
-
 	signed char item = 0;
+
 	update = 1;
 	selected = 0;
 
@@ -125,14 +127,19 @@ int main(void) {
 	showPicture((int)&titlecard);
 
 	while(1) {
+		setupInterrupt();
 		if(gamemenu()) break;
 		if(help) {
 			showhelp();
+			disableInterrupt();
 		} else {
+			disableInterrupt();
 			gameloop();
 			VIC.spr_ena = 0;
 		}
 	}
+
+	disableInterrupt();
 
 	// restore proper screen setup on exit
 	clearScreen(1);
