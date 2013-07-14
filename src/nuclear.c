@@ -14,6 +14,7 @@
 extern const char titlecard[]; // text.s
 extern void setupInterrupt(); // asm.s
 extern void disableInterrupt(); // asm.s
+extern char colorwashrow; // asm.s
 
 unsigned char help;
 
@@ -93,6 +94,8 @@ char gamemenu() {
 		item = (item > 3) ? 3 : item;
 		item = (item < 0) ? 0 : item;
 
+		colorwashrow = 4 + (3 * item);
+
 		if(update) {
 			textcolor(15);
 			cputsxy(3, 4, "   match against the computer");
@@ -129,17 +132,15 @@ int main(void) {
 	while(1) {
 		setupInterrupt();
 		if(gamemenu()) break;
+		disableInterrupt();
 		if(help) {
 			showhelp();
-			disableInterrupt();
 		} else {
-			disableInterrupt();
 			gameloop();
 			VIC.spr_ena = 0;
 		}
 	}
 
-	disableInterrupt();
 
 	// restore proper screen setup on exit
 	clearScreen(1);

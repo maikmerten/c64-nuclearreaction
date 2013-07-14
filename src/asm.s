@@ -1,5 +1,6 @@
 .export _setupInterrupt
 .export _disableInterrupt
+.export _colorwashrow
 
 .zeropage
 
@@ -8,17 +9,21 @@ _tmp16: .res 2
 .segment "CODE"
 
 
-clock_init = 3
+clock_init = 2
 
 _irq_req: .res 1
 
 _clock: .res 1
 
+
 _color: .byte $09,$09,$02,$02,$08,$08,$0a,$0a,$0f,$0f,$07,$07,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$07,$07,$0f,$0f,$0a,$0a,$08,$08,$02,$02,$09,$09 
+
 
 ; A table with the starting address for every row of the color RAM
 _colramrows_MSB: .byte $D8,$D8,$D8,$D8,$D8,$D8,$D8,$D9,$D9,$D9,$D9,$D9,$D9,$DA,$DA,$DA,$DA,$DA,$DA,$DA,$DB,$DB,$DB,$DB,$DB
 _colramrows_LSB: .byte $00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68,$90,$B8,$E0,$08,$30,$58,$80,$A8,$D0,$F8,$20,$48,$70,$98,$C0
+
+_colorwashrow: .byte $01
 
 
 .proc _colorwash: near
@@ -67,6 +72,45 @@ _colramrows_LSB: .byte $00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68,$90,$B8,$E0,$08,$
 	rts
 .endproc
 
+; ########## special case of colorwash for the menu item selection
+.proc _colorwash_menu: near
+
+	; ###### shift colors
+
+	ldy _color+0	; save first color before overwriting
+
+	ldx #0		; loop counter
+	loop_colorshift:
+		lda _color+1,x	; load color next cell
+		sta _color,x	; copy to current position
+		inx		; increase loop counter
+		cpx #40
+		bne loop_colorshift
+	loop_colorshift_end:
+
+	sty _color+39	; copy first color to last position
+
+	; ###### copy to color RAM
+
+	ldx _colorwashrow ; row to color wash
+
+	lda _colramrows_LSB,x;
+	sta _tmp16;
+	lda _colramrows_MSB,x;
+	sta _tmp16+1;
+
+	ldy #6 ; loop counter for screen cols
+	loop_copy:
+
+		lda _color,y
+		sta (_tmp16),y
+		iny
+		cpy #32
+		bne loop_copy
+	loop_copy_end:
+
+	rts
+.endproc
 
 
 
@@ -119,7 +163,7 @@ _colramrows_LSB: .byte $00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68,$90,$B8,$E0,$08,$
 	ldy #clock_init
 	sty _clock;
 
-	jsr _colorwash
+	jsr _colorwash_menu
 
 skip:
 	jmp $ea31 ; return to kernel interrupt routine
