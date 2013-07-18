@@ -25,7 +25,7 @@ void showhelp() {
 	int i;
 
 	// enable charset 2
-	*((char*	)53272) = 23;
+	*((char*)53272) = 23;
 
 	x = 0;
 	y = 0;
@@ -126,6 +126,10 @@ char gamemenu() {
 
 int main(void) {
 
+	// block switching character sets with Shift+C=
+	*((char*)0x0291) = 128;
+	
+
 	bordercolor(0);
 	showPicture((int)&titlecard);
 
@@ -147,6 +151,9 @@ int main(void) {
 	bordercolor(14);
 	bgcolor(6);
 	textcolor(14);
+
+	// unblockblock switching character sets with Shift+C=
+	*((char*)0x0291) = 0;
 
 	return EXIT_SUCCESS;
 }
