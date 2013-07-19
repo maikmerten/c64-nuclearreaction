@@ -1,6 +1,8 @@
 .export _setupInterrupt
 .export _disableInterrupt
 .export _colorwashrow
+.export _colorwashcolstart
+.export _colorwashcolend
 
 .zeropage
 
@@ -23,7 +25,9 @@ _color: .byte $09,$09,$02,$02,$08,$08,$0a,$0a,$0f,$0f,$07,$07,$01,$01,$01,$01,$0
 _colramrows_MSB: .byte $D8,$D8,$D8,$D8,$D8,$D8,$D8,$D9,$D9,$D9,$D9,$D9,$D9,$DA,$DA,$DA,$DA,$DA,$DA,$DA,$DB,$DB,$DB,$DB,$DB
 _colramrows_LSB: .byte $00,$28,$50,$78,$A0,$C8,$F0,$18,$40,$68,$90,$B8,$E0,$08,$30,$58,$80,$A8,$D0,$F8,$20,$48,$70,$98,$C0
 
-_colorwashrow: .byte $01
+_colorwashrow: .byte 25 ; initialize so colorwash will be skipped
+_colorwashcolstart: .byte 0 ; column start for colorwash
+_colorwashcolend: .byte 39 ; column end for colorwash
 
 
 .proc _colorwash: near
@@ -99,15 +103,17 @@ _colorwashrow: .byte $01
 	lda _colramrows_MSB,x;
 	sta _tmp16+1;
 
-	ldy #6 ; loop counter for screen cols
+	ldy _colorwashcolstart ; loop counter for screen cols
 	loop_copy:
 
 		lda _color,y
 		sta (_tmp16),y
 		iny
-		cpy #32
+		cpy _colorwashcolend
 		bne loop_copy
 	loop_copy_end:
+	lda _color,y
+	sta (_tmp16),y ; last copy for the case _colorwashend == y
 
 	rts
 .endproc
@@ -159,14 +165,21 @@ _colorwashrow: .byte $01
 	dec $d019 ; acknowledge IRQ
 
 	dec _clock;
-	bne skip
-	ldy #clock_init
-	sty _clock;
+	bne timer_not_expired ; only do custom interrupt if clock is zero
+	timer_expired:
+		ldy #clock_init
+		sty _clock;
 
-	jsr _colorwash_menu
+		lda _colorwashrow
+		cmp #25
+		bpl colorwash_skip ; apply colorwash only to rows < 25
 
-skip:
-	jmp $ea31 ; return to kernel interrupt routine
+		colorwash:
+			jsr _colorwash_menu
+		colorwash_skip:
+
+	timer_not_expired:
+		jmp $ea31 ; return to kernel interrupt routine
 .endproc
 
 

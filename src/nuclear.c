@@ -15,6 +15,8 @@ extern const char titlecard[]; // text.s
 extern void setupInterrupt(); // asm.s
 extern void disableInterrupt(); // asm.s
 extern char colorwashrow; // asm.s
+extern char colorwashcolstart; // asm.s
+extern char colorwashcolend; // asm.s
 
 unsigned char help;
 
@@ -94,8 +96,11 @@ char gamemenu() {
 		item = (item > 3) ? 3 : item;
 		item = (item < 0) ? 0 : item;
 
+		// set up row and column for color wash effect
 		colorwashrow = 4 + (3 * item);
-
+		colorwashcolstart = 6;
+		colorwashcolend = 31;
+		
 		if(update) {
 			textcolor(15);
 			cputsxy(3, 4, "   match against the computer");
