@@ -4,6 +4,10 @@
 #include "field.h"
 #include "input.h"
 
+extern char colorwashrow; // asm.s
+extern char colorwashcolstart; // asm.s
+extern char colorwashcolend; // asm.s
+
 unsigned char field[SIZEX][SIZEY];
 unsigned char ki;
 unsigned char playercolors[3] = {0, 10, 14 };
@@ -109,11 +113,16 @@ void gameloop() {
 	}
 
 	textcolor(1);
-	if(winner == 1) cputsxy(8, 22, "player 1 won");
+	if(winner == 1) cputsxy(13, 22, "player 1 won");
 	else if(winner == 2) {
-		if(ki) cputsxy(8, 22, "the computer won");
-		else cputsxy(8, 22, "player 2 won");
+		if(ki) cputsxy(11, 22, "the computer won");
+		else cputsxy(13, 22, "player 2 won");
 	}
+	
+	// enable triumphant color wash
+	colorwashrow = 22;
+	colorwashcolstart = 11;
+	colorwashcolend = 26;
 
 	wait = 0;
 	cputsxy(8, 24, "press fire to continue");

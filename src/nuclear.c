@@ -138,10 +138,12 @@ int main(void) {
 	bordercolor(0);
 	showPicture((int)&titlecard);
 
+	setupInterrupt();
+	
 	while(1) {
-		setupInterrupt();
+		
 		if(gamemenu()) break;
-		disableInterrupt();
+		colorwashrow = 25; // disable colorwash
 		if(help) {
 			showhelp();
 		} else {
@@ -150,6 +152,7 @@ int main(void) {
 		}
 	}
 
+	disableInterrupt();
 
 	// restore proper screen setup on exit
 	clearScreen(1);
