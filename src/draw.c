@@ -7,8 +7,8 @@
 void clearScreen(char textcolor) {
 	bordercolor(0);
 	bgcolor(0);
-	memset((int*)TEXTBASE,CHAR_SPACE,1000);
-	memset((int*)COLORRAM,textcolor,1000);
+	memset((char*)TEXTBASE,CHAR_SPACE,1000);
+	memset((char*)COLORRAM,textcolor,1000);
 }
 
 void drawCell(char x, char y) {
@@ -157,16 +157,16 @@ void showPicture(int imgdata) {
 	VIC.spr_ena = 0;
 
 	// 8000 bytes bitmap
-	memcpy((int*)(BANK3BASE + 8192), (int*)imgdata, 8000);
+	memcpy((char*)(BANK3BASE + 8192), (char*)imgdata, 8000);
 
 	// 1000 bytes char mem
-	memcpy((int*)(BANK3BASE + 0x0400), (int*)(imgdata + 8000), 1000);
+	memcpy((char*)(BANK3BASE + 0x0400), (char*)(imgdata + 8000), 1000);
 
 	// 1000 bytes color mem
-	memcpy((int*)(0xD800), (int*)(imgdata + 9000), 1000);
+	memcpy((char*)(0xD800), (char*)(imgdata + 9000), 1000);
 
 	// 1 byte background color
-	bgcolor(*((int*)(imgdata + 10000)));
+	bgcolor(*((char*)(imgdata + 10000)));
 
 	// now that we copied the bitmap data, switch bank
 	switchBank(3);
@@ -197,8 +197,8 @@ void displayPlayerSprite(char player) {
 	int xpos = SPRITE_PLAYER_X;
 	VIC.spr_ena = 0;
 	WAIT_WHILE_RASTERLINE_LOW
-	if(player == PLAYERAI && ki) memcpy((int*) SPRITE0_DATA, sprComputer, 63);
-	else memcpy((int*) SPRITE0_DATA, sprHuman, 63);
+	if(player == PLAYERAI && ki) memcpy((char*) SPRITE0_DATA, sprComputer, 63);
+	else memcpy((char*) SPRITE0_DATA, sprHuman, 63);
 	*((char*)SPRITE0_PTR) = SPRITE0_DATA >> 6;
 	if(player > 1) xpos += 230;
 	VIC.spr_ena = 1;
