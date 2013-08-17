@@ -11,7 +11,6 @@
 #include "petscii.h"
 
 
-extern const char titlecard[]; // text.s
 extern void setupInterrupt(); // asm.s
 extern void disableInterrupt(); // asm.s
 extern char colorwashrow; // asm.s
@@ -133,10 +132,13 @@ int main(void) {
 
 	// block switching character sets with Shift+C=
 	*((char*)0x0291) = 128;
-	
 
 	bordercolor(0);
-	showPicture((int)&titlecard);
+	bgcolor(0);
+	clearScreen(1);
+	textcolor(1);
+	cputsxy(15,12, "loading...");
+	showPicture("title");
 
 	setupInterrupt();
 	

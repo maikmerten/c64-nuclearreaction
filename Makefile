@@ -3,6 +3,7 @@ nuclear: src/nuclear.c src/draw.h src/draw.c src/field.h src/field.c src/ai.h sr
 	cp empty.d64 nuclear.d64
 	c1541 -attach nuclear.d64 -write nuclear.prg nuclear.prg
 	c1541 -attach nuclear.d64 -write src/resources/readme.txt readme
+	c1541 -attach nuclear.d64 -write src/resources/title.koa title
 
 
 clean:

@@ -20,7 +20,7 @@ void drawField();
 void highlightCell(char x, char y);
 void printHUD(char player, char color, char move, char ki);
 void setCellColor(char color, char x, char y);
-void showPicture(int imgdata);
+void showPicture(char* filename);
 void switchBank(char base);
 
 

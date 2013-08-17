@@ -146,7 +146,8 @@ void switchBank(char base) {
 }
 
 
-void showPicture(int imgdata) {
+void showPicture(char* filename) {
+	FILE* f;
 	int i = 0;
 	int vicconf[3];
 
@@ -156,17 +157,29 @@ void showPicture(int imgdata) {
 
 	VIC.spr_ena = 0;
 
+	f = fopen(filename, "r");
+	
+	// consume two bytes of header
+	i = fgetc(f);
+    i = fgetc(f);
+	
 	// 8000 bytes bitmap
-	memcpy((char*)(BANK3BASE + 8192), (char*)imgdata, 8000);
+	fread((char*)(BANK3BASE + 8192), 1, 8000, f);
 
 	// 1000 bytes char mem
-	memcpy((char*)(BANK3BASE + 0x0400), (char*)(imgdata + 8000), 1000);
+	fread((char*)(BANK3BASE + 0x0400), 1, 1000, f);
 
+	// clear screen before loading color data to avoid garbage-colored text
+	clearScreen(0);
+	
 	// 1000 bytes color mem
-	memcpy((char*)(0xD800), (char*)(imgdata + 9000), 1000);
+	fread((char*)(0xD800), 1, 1000, f);
 
 	// 1 byte background color
-	bgcolor(*((char*)(imgdata + 10000)));
+	bgcolor((char) fgetc(f));
+	
+	// close input file
+	fclose(f);
 
 	// now that we copied the bitmap data, switch bank
 	switchBank(3);
