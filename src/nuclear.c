@@ -64,8 +64,8 @@ char gamemenu() {
 	update = 1;
 	selected = 0;
 
-	// enable charset 1
-	*((char*)53272) = 21;
+	// select custom font
+	setCharsetPosition(7);
 
 	clearScreen(1);
 
@@ -129,14 +129,23 @@ char gamemenu() {
 
 
 int main(void) {
+	FILE* f;
 
 	// block switching character sets with Shift+C=
 	*((char*)0x0291) = 128;
 
+	// upload custom font to last possible position in VIC bank 3
+	f = fopen("font","r");
+	fread((char*)(14336), 1, 2048, f);
+	fclose(f);
+	
 	bordercolor(0);
 	bgcolor(0);
 	clearScreen(1);
 	textcolor(1);
+	
+	// enable custom charset
+	setCharsetPosition(7);
 	cputsxy(15,12, "loading...");
 	showPicture("title");
 
@@ -164,6 +173,9 @@ int main(void) {
 
 	// unblockblock switching character sets with Shift+C=
 	*((char*)0x0291) = 0;
+	
+	// enable original upper-case charset
+	setCharsetPosition(2);
 
 	return EXIT_SUCCESS;
 }

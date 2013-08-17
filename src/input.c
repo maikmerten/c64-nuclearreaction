@@ -38,6 +38,8 @@ char isInputExit() {
 	if(kbhit()) {
 		// check for escape key
 		if(cgetc() == 3) {
+			// consume all key presses
+			while(kbhit()) cgetc();
 			return 1;
 		}
 	}

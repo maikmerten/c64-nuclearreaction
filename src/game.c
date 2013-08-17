@@ -48,8 +48,8 @@ void gameloop() {
 	char fire,wait,owner;
 	int airesult;
 
-	// enable charset 1
-	*((char*)53272) = 21;
+	// enable custom charset
+	setCharsetPosition(7);
 
 	clearScreen(FIELDCOLOR);
 	clearField();

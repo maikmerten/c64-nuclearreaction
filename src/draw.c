@@ -205,6 +205,16 @@ void showPicture(char* filename) {
 	bgcolor(0);
 }
 
+void setCharsetPosition(unsigned char pos) {
+	// legal range for pos: 0 - 7
+	char c = *(char*)0xD018; // VIC mem layout register
+	// bits 1 to 3 in 0xD018 determine charset offset in bank, so shift pos
+	pos = pos << 1;
+	// mask bits 1 to 3 to zero
+	c &= 0xf1;
+	c |= pos;
+	*(char*)0xD018 = c;
+}
 
 void displayPlayerSprite(char player) {
 	int xpos = SPRITE_PLAYER_X;

@@ -22,6 +22,7 @@ void printHUD(char player, char color, char move, char ki);
 void setCellColor(char color, char x, char y);
 void showPicture(char* filename);
 void switchBank(char base);
+void setCharsetPosition(char pos);
 
 
 
