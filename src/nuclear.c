@@ -131,12 +131,15 @@ char gamemenu() {
 int main(void) {
 	FILE* f;
 
+	// switch second-highest memory area
+	switchBank(2);
+	
 	// block switching character sets with Shift+C=
 	*((char*)0x0291) = 128;
 
-	// upload custom font to last possible position in VIC bank 3
+	// upload custom font into bank for text display
 	f = fopen("font","r");
-	fread((char*)(14336), 1, 2048, f);
+	fread((char*)(32768 + 14336), 1, 2048, f);
 	fclose(f);
 	
 	bordercolor(0);
@@ -173,9 +176,12 @@ int main(void) {
 
 	// unblockblock switching character sets with Shift+C=
 	*((char*)0x0291) = 0;
+
+	// switch to original VIC bank (lowest memory position)
+	switchBank(0);
 	
 	// enable original upper-case charset
 	setCharsetPosition(2);
-
+	
 	return EXIT_SUCCESS;
 }

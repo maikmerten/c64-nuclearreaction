@@ -1,9 +1,10 @@
 #ifndef __draw_h
 #define __draw_h
 
-
-
 #include "defs.h"
+
+#define VICBANKTEXT 2
+#define VICBANKBITMAP 3
 
 
 extern unsigned char playercolors[3];
@@ -21,7 +22,7 @@ void highlightCell(char x, char y);
 void printHUD(char player, char color, char move, char ki);
 void setCellColor(char color, char x, char y);
 void showPicture(char* filename);
-void switchBank(char base);
+void switchBank(char pos);
 void setCharsetPosition(char pos);
 
 

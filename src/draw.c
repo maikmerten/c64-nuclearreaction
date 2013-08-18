@@ -139,10 +139,42 @@ void drawField() {
 }
 
 
-void switchBank(char base) {
-	char c = *(int*)0xDD00; // CIA 2
+unsigned char getBank() {
+	char c = *(char*)0xDD00; // CIA 2
+	c &= 0x03;
+	return c;
+}
+
+unsigned int getBankAddress() {
+	char base = 3 - getBank();
+	return 0x4000 * base;
+}
+
+void switchBank(char pos) {
+	// valid values for pos are 0 to 3
+	// 0 is VIC bank in lowest memory position, 3 in highest!
+	
+	int screenAddr;
+
+	// legal range for pos: 0 - 3
+	// notice that 0 selects vic bank 3, 1 selects vic bank 2, etc.
+	char c = *(char*)0xDD00; // CIA 2
 	c &= 252;
-	*(int*)0xDD00 = (c | (3 - base)); // switch VIC base
+	*(char*)0xDD00 = (c | (3 - pos)); // switch VIC base
+	
+	if(pos != VICBANKBITMAP) {
+		// update kernal pointer to screen RAM
+		screenAddr = getBankAddress() + 1024;
+		// 0x0288 contains high byte of pointer to screen RAM
+		*(char*)0x0288 = screenAddr >> 8;
+		// kernal updates screen pointer on clear screen
+		printf("\f"); // clear screen
+
+		// update pointer to current line in screen RAM
+		*(char*)0xD1 = (char) screenAddr; 	// LSB
+		*(char*)0xD2 = (char) screenAddr >> 8;	// MSB
+	}
+
 }
 
 
@@ -182,7 +214,7 @@ void showPicture(char* filename) {
 	fclose(f);
 
 	// now that we copied the bitmap data, switch bank
-	switchBank(3);
+	switchBank(VICBANKBITMAP);
 
 	// multicolor on
 	// POKE 53265,PEEK(53265) OR 32 : POKE 53270,PEEK(53270) OR 16
@@ -199,7 +231,8 @@ void showPicture(char* filename) {
 	VIC.ctrl1 = vicconf[1];
 	VIC.ctrl2 = vicconf[2];
 
-	switchBank(0);
+	// back to bank for text output
+	switchBank(VICBANKTEXT);
 
 	clrscr();
 	bgcolor(0);

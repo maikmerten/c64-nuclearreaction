@@ -13,10 +13,11 @@
 #define WAIT_WHILE_RASTERLINE_HIGH	while (VIC.ctrl1 & 0x80) {};
 
 // memory locations
-#define TEXTBASE 0x0400
+#define TEXTBASE 0x8400 // this is 32768 + 1024
 #define COLORRAM 0xD800
 
 // VIC banks
+// notice that on the real hardware, bank 0 is bank 3 etc.
 #define BANK0BASE 0
 #define BANK1BASE 16384
 #define BANK2BASE 32768
@@ -31,8 +32,8 @@
 #define PLAYERAI 2
 
 // sprites
-#define SPRITE0_DATA    0x0340
-#define SPRITE0_PTR     0x07F8
+#define SPRITE0_DATA    33600
+#define SPRITE0_PTR     34808
 #define SPRITE_PLAYER_X 45 
 #define SPRITE_PLAYER_Y 105
 
