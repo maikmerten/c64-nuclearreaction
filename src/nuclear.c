@@ -57,7 +57,7 @@ void showhelp() {
 
 
 char gamemenu() {
-	char quit,selected,wait,update;
+	char up,down,quit,selected,wait,update;
 	char cnt = 0;
 	signed char item = 0;
 
@@ -83,11 +83,11 @@ char gamemenu() {
 	cputsxy(8, 0, " nuclear reaction 2100 ");
 
 	while(!selected) {
-		if (isInputUp()) {
+		if (up) {
 			--item;
 			update = 1;
 		}
-		if (isInputDown()) {
+		if (down) {
 			++item;
 			update = 1;
 		}
@@ -114,6 +114,8 @@ char gamemenu() {
 
 		for(wait = 8; wait > 0; --wait) {
 			WAIT_WHILE_RASTERLINE_LOW
+			up = isInputUp();
+			down = isInputDown();
 			selected = (isInputAction()) ? 1 : 0;
 			WAIT_WHILE_RASTERLINE_HIGH
 		}

@@ -45,7 +45,7 @@ void doMove(signed char x, signed char y,) {
 
 void gameloop() {
 	signed char posx,posy; // signed for simple detection of underflow
-	char fire,wait,owner;
+	char up,down,left,right,fire,wait,owner;
 	int airesult;
 
 	// enable custom charset
@@ -69,10 +69,10 @@ void gameloop() {
 
 		setCellColor(FIELDCOLOR, posx, posy);
 
-		if (isInputUp()) --posy;
-		if (isInputDown()) ++posy;
-		if (isInputLeft()) --posx;
-		if (isInputRight()) ++posx;
+		if (up) --posy;
+		if (down) ++posy;
+		if (left) --posx;
+		if (right) ++posx;
 
 		posx = posx < 0 ? 0 : posx;
 		posx = posx >= SIZEX ? SIZEX - 1 : posx;
@@ -107,6 +107,10 @@ void gameloop() {
 		WAIT_WHILE_RASTERLINE_HIGH
 		for(wait = 5; wait > 0; --wait) {
 			WAIT_WHILE_RASTERLINE_LOW
+			up = isInputUp();
+			down = isInputDown();
+			left = isInputLeft();
+			right = isInputRight();
 			srand(rand());
 			WAIT_WHILE_RASTERLINE_HIGH
 		}
