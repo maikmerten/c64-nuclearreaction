@@ -63,6 +63,7 @@ void gameloop() {
 	posy = 0;
 	move = 1;
 	updateHUD = 1;
+	up = down = left = right = 0;
 
 	while(!winner) {
 		WAIT_WHILE_RASTERLINE_LOW
