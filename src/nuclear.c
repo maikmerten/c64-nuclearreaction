@@ -25,13 +25,11 @@ void showhelp() {
 	FILE* f;
 	int i;
 
-	// enable charset 2
-	*((char*)53272) = 23;
-
 	x = 0;
 	y = 0;
 
 	clearScreen(1);
+	textcolor(14);
 
 	f = fopen("readme", "r");
 
@@ -63,9 +61,6 @@ char gamemenu() {
 
 	update = 1;
 	selected = 0;
-
-	// select custom font
-	setCharsetPosition(7);
 
 	clearScreen(1);
 
@@ -104,7 +99,7 @@ char gamemenu() {
 			textcolor(15);
 			cputsxy(3, 4, "   match against the computer");
 			cputsxy(3, 7, "   match between two humans");
-			cputsxy(3, 10, "   help");
+			cputsxy(3, 10, "   help and credits");
 			cputsxy(3, 13, "   quit");
 			textcolor(1);
 			cputsxy(4, 3 * item + 4, "Q");

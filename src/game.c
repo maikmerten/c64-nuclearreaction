@@ -48,9 +48,6 @@ void gameloop() {
 	char up,down,left,right,fire,wait,owner;
 	int airesult;
 
-	// enable custom charset
-	setCharsetPosition(7);
-
 	clearScreen(FIELDCOLOR);
 	clearField();
 	drawField();
