@@ -46,36 +46,67 @@ char countEndangered(char f[SIZEX][SIZEY], char p) {
 	return danger;
 }
 
-
-int thinkAI() {
-	unsigned char x,y,oppscore,size;
-	signed char tmp,score;
-	unsigned int result;
-	size = SIZEX * SIZEY;
-	oppscore = getOwnerCount(field, 1);
-	score = -127;
+signed int evaluateField(char f[SIZEX][SIZEY], char p) {
+	unsigned char x,y,owner,otherplayer;
+	int score = 0;
+	otherplayer = p == 1 ? 2 : 1;
 	for(x = 0; x < SIZEX; ++x) {
 		for(y = 0; y < SIZEY; ++y) {
-			memcpy(fieldAI, field, size);
-			tmp = getOwner(fieldAI, x, y);
-			if(tmp == PLAYERAI || tmp == 0) {
-				tmp = 0;
+			owner = getOwner(f, x, y);
+			if(owner == p) {
+				 // the more cells, the better, but prefer corners and edges
+				score += 4 - getCapacity(x, y);
+				// small bonus for fields that are ready to explode
+				score += isCritical(f, x, y);
+				
+			}
+		}
+	}
+	 // endangered fields are dangerous...
+	score -= (countEndangered(f, p) << 1);
+	// ... unless they belong to the other player
+	score += countEndangered(f, otherplayer);
+	
+	return score;
+}
+
+
+int thinkAI() {
+	unsigned char x,y,size,owner;
+	signed int tmp,score,oppscore,loss;
+	unsigned int result;
+	size = SIZEX * SIZEY;
+	// compute the field score for the opposing player
+	oppscore = evaluateField(field, 1);
+	score = -32000;
+	for(x = 0; x < SIZEX; ++x) {
+		for(y = 0; y < SIZEY; ++y) {
+			owner = getOwner(field, x, y);
+			if(owner == PLAYERAI || owner == 0) {
 				// we can use this cell
+				memcpy(fieldAI, field, size); // create working copy
+				tmp = 0;
+				
+				// it makes little sense to add atoms to endangered cells
+				// unless they can start a chain reaction
+				if(computeDanger(fieldAI, PLAYERAI, x, y) > 0 && isCritical(fieldAI, x, y) == 0) {
+					tmp -= 10;
+				}
+
+				// let the reaction run
 				putAtom(fieldAI, PLAYERAI, x, y, 0);
 				react(fieldAI, 0);
-				tmp += getOwnerCount(fieldAI, PLAYERAI);
-				// compute lost enemy fields
-				tmp += oppscore - getOwnerCount(fieldAI, 1);
-				tmp += getAtoms(fieldAI, x, y);
-				tmp += ((x == 0 || x == MAXX) && (y == 0 || y == MAXY)) ? 1 : 0;
-				tmp -= (computeDanger(fieldAI, PLAYERAI, x, y)) << 2;
-				tmp -= countEndangered(fieldAI, PLAYERAI);
+				
+				// evaluate the resulting field constellation
+				tmp += evaluateField(fieldAI, PLAYERAI);
+				// add loss of the opposing player
+				loss = oppscore - evaluateField(fieldAI, 1);
+				tmp += loss;
+
 				if(tmp > score || (tmp == score && (rand() & 0x01))) {
 					score = tmp;
 					result = (x << 8) | y;
-
 				}
-
 			}
 		}
 	}
