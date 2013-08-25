@@ -47,8 +47,9 @@ char countEndangered(char f[SIZEX][SIZEY], char p) {
 }
 
 signed int evaluateField(char f[SIZEX][SIZEY], char p) {
-	unsigned char x,y,owner,otherplayer;
+	unsigned char x,y,owner,otherplayer,otherfields;
 	int score = 0;
+	otherfields = 0;
 	otherplayer = p == 1 ? 2 : 1;
 	for(x = 0; x < SIZEX; ++x) {
 		for(y = 0; y < SIZEY; ++y) {
@@ -58,14 +59,20 @@ signed int evaluateField(char f[SIZEX][SIZEY], char p) {
 				score += 4 - getCapacity(x, y);
 				// small bonus for fields that are ready to explode
 				score += isCritical(f, x, y);
-				
+			} else {
+				++otherfields;
 			}
 		}
 	}
-	 // endangered fields are dangerous...
+	 // endangered cells are dangerous...
 	score -= (countEndangered(f, p) << 1);
 	// ... unless they belong to the other player
 	score += countEndangered(f, otherplayer);
+	
+	// REALLY reward if no cells are left to the other guy
+	if(otherfields == 0) {
+		score += 1000;
+	}
 	
 	return score;
 }
