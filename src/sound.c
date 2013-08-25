@@ -18,3 +18,17 @@ void soundExplode() {
 	SID.v2.ctrl = 0x21; // square wave, set attack bit
 	SID.v2.ctrl = 0x20; // release attack bit
 }
+
+void soundMute() {
+	SID.v1.sr = 0x01;
+	SID.v1.ctrl = 0x1;
+	SID.v1.ctrl = 0x0;
+	
+	SID.v2.sr = 0x01;
+	SID.v2.ctrl = 0x1;
+	SID.v2.ctrl = 0x0;
+	
+	SID.v3.sr = 0x01;
+	SID.v3.ctrl = 0x1;
+	SID.v3.ctrl = 0x0;
+}

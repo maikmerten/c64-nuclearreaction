@@ -5,6 +5,6 @@
 
 void soundBleep();
 void soundExplode();
-
+void soundMute();
 
 #endif

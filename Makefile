@@ -5,6 +5,7 @@ nuclear: src/nuclear.c src/draw.h src/draw.c src/field.h src/field.c src/ai.h sr
 	c1541 -attach nuclear.d64 -write src/resources/readme.txt readme
 	c1541 -attach nuclear.d64 -write src/resources/title.koa title
 	c1541 -attach nuclear.d64 -write src/resources/nuclearfont font
+	c1541 -attach nuclear.d64 -write src/resources/time_portal_7000.sid music
 
 
 clean:

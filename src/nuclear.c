@@ -9,6 +9,7 @@
 #include "input.h"
 #include "game.h"
 #include "petscii.h"
+#include "sound.h"
 
 
 extern void setupInterrupt(); // asm.s
@@ -147,6 +148,15 @@ int main(void) {
 	// enable custom charset
 	setCharsetPosition(7);
 	cputsxy(15,12, "loading...");
+	
+	// loading SID tune to 0x7000
+	f = fopen("music","r");
+	// skip first 126 bytes, header'n'stuff
+	fread((char*)0x7000, 1, 126, f);
+	// copy up to 4k of sid tune
+	fread((char*)0x7000, 1, 4096, f);
+	fclose(f);
+	
 	showPicture("title");
 
 	setupInterrupt();
@@ -164,6 +174,8 @@ int main(void) {
 	}
 
 	disableInterrupt();
+	
+	soundMute();
 
 	// restore proper screen setup on exit
 	clearScreen(1);

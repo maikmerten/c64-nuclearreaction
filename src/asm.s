@@ -11,6 +11,10 @@ _tmp16: .res 2
 .segment "CODE"
 
 
+sid_init = $7000
+sid_play = $7003
+
+
 clock_init = 2
 
 _irq_req: .res 1
@@ -128,6 +132,7 @@ _colorwashcolend: .byte 39 ; column end for colorwash
 	ldy #clock_init;
 	sty _clock;
 
+	jsr sid_init ; #### init SID
 
 	; Save interrupt request mask
 	ldy $d01a
@@ -163,6 +168,8 @@ _colorwashcolend: .byte 39 ; column end for colorwash
 
 .proc _interrupt
 	dec $d019 ; acknowledge IRQ
+
+	jsr sid_play ; #### play SID
 
 	dec _clock;
 	bne timer_not_expired ; only do custom interrupt if clock is zero
