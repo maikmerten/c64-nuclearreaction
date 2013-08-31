@@ -34,8 +34,18 @@
 // sprites
 #define SPRITE0_DATA    33600
 #define SPRITE0_PTR     34808
-#define SPRITE_PLAYER_X 45 
+#define SPRITE_PLAYER_X 45
 #define SPRITE_PLAYER_Y 105
+
+// position of sprites in VIC bank
+#define HUMAN_PTR 198
+#define COMPUTER_PTR 199
+#define CELL0_PTR 200
+#define CELL1_PTR 201
+#define CELL2_PTR 202
+#define CELL3_PTR 203
+#define CELL4_PTR 204
+#define CURSOR_PTR 205
 
 // dimensions of playing field
 #define SIZEX 6

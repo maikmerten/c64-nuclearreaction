@@ -18,12 +18,14 @@ void displayPlayerSprite(char player);
 void drawAtoms(char x, char y);
 void drawCell(char x, char y);
 void drawField();
+void hideField();
+void setCursor(char x, char y, char color);
 void highlightCell(char x, char y);
 void printHUD(char player, char color, char move, char ki);
-void setCellColor(char color, char x, char y);
 void showPicture(char* filename);
 void switchBank(char pos);
 void setCharsetPosition(char pos);
+unsigned int getSpriteAddress(char spriteidx);
 
 
 

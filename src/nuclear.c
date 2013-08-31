@@ -124,17 +124,9 @@ char gamemenu() {
 	return quit;
 }
 
-
-
-int main(void) {
+void loadAssets() {
 	FILE* f;
-
-	// switch second-highest memory area
-	switchBank(2);
 	
-	// block switching character sets with Shift+C=
-	*((char*)0x0291) = 128;
-
 	// upload custom font into bank for text display
 	f = fopen("font","r");
 	fread((char*)(32768 + 14336), 1, 2048, f);
@@ -156,20 +148,73 @@ int main(void) {
 	// copy up to 4k of sid tune
 	fread((char*)0x7000, 1, 4096, f);
 	fclose(f);
+
+	// loading sprite for human player
+	f = fopen("human","r");
+	fread((char*)getSpriteAddress(HUMAN_PTR), 1, 63, f);
+	fclose(f);
+	
+	// loading sprite for computer player
+	f = fopen("computer","r");
+	fread((char*)getSpriteAddress(COMPUTER_PTR), 1, 63, f);
+	fclose(f);
+	
+	// loading sprite for empty game field cell
+	f = fopen("cell0","r");
+	fread((char*)getSpriteAddress(CELL0_PTR), 1, 63, f);
+	fclose(f);
+	
+	// loading sprite for game field cell with 1 atom
+	f = fopen("cell1","r");
+	fread((char*)getSpriteAddress(CELL1_PTR), 1, 63, f);
+	fclose(f);
+
+	// loading sprite for game field cell with 2 atoms
+	f = fopen("cell2","r");
+	fread((char*)getSpriteAddress(CELL2_PTR), 1, 63, f);
+	fclose(f);
+	
+	// loading sprite for game field cell with 3 atoms
+	f = fopen("cell3","r");
+	fread((char*)getSpriteAddress(CELL3_PTR), 1, 63, f);
+	fclose(f);
+	
+	// loading sprite for game field cell with 4 atoms
+	f = fopen("cell4","r");
+	fread((char*)getSpriteAddress(CELL4_PTR), 1, 63, f);
+	fclose(f);
+	
+	// loading sprite for game field cursor
+	f = fopen("cursor","r");
+	fread((char*)getSpriteAddress(CURSOR_PTR), 1, 63, f);
+	fclose(f);
+	
+}
+
+
+int main(void) {
+	// switch second-highest memory area
+	switchBank(2);
+	
+	// block switching character sets with Shift+C=
+	*((char*)0x0291) = 128;
+
+	loadAssets();
 	
 	showPicture("title");
 
 	setupInterrupt();
 	
 	while(1) {
-		
 		if(gamemenu()) break;
 		colorwashrow = 25; // disable colorwash
 		if(help) {
 			showhelp();
 		} else {
+			// consume all key presses
+			while(kbhit()) cgetc();
 			gameloop();
-			VIC.spr_ena = 0;
+			hideField();
 		}
 	}
 

@@ -65,8 +65,6 @@ void gameloop() {
 	while(!winner) {
 		WAIT_WHILE_RASTERLINE_LOW
 
-		setCellColor(FIELDCOLOR, posx, posy);
-
 		if (up) --posy;
 		if (down) ++posy;
 		if (left) --posx;
@@ -77,7 +75,7 @@ void gameloop() {
 		posy = posy < 0 ? 0 : posy;
 		posy = posy >= SIZEY ? SIZEY - 1 : posy;
 
-		setCellColor(playercolors[player], posx, posy);
+		setCursor(posx, posy, playercolors[player]);
 		owner = getOwner(field, posx, posy);
 
 		fire = 0;

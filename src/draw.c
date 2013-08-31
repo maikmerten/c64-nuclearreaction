@@ -4,6 +4,10 @@
 #include "sound.h"
 #include "petscii.h"
 
+extern char draw_field,cursor_x,cursor_y,cursor_color;
+extern char* sprite_field_ptrs;
+extern char* sprite_field_colors;
+
 void clearScreen(char textcolor) {
 	bordercolor(0);
 	bgcolor(0);
@@ -64,39 +68,18 @@ void drawCell(char x, char y) {
 	}
 }
 
-void setCellColor(char color, char x, char y) {
-	int pos = COLORRAM;
-	pos += FIELDOFF;
-	pos += (x * 3);
-	pos += (y * 120);
-	++pos;
-
-	*((char*)pos++) = color;
-	*((char*)pos++) = color;
-	pos += 37;
-	*((char*)pos) = color;
-	pos += 3;
-	*((char*)pos) = color;
-	pos += 37;
-	*((char*)pos) = color;
-	pos += 3;
-	*((char*)pos++) = color;
-	pos += 37;
-	*((char*)pos++) = color;
-	*((char*)pos++) = color;
-}
 
 void highlightCell(char x, char y) {
 	char i,j;	
 
 	for(i = 3; i > 0; --i) {
-		setCellColor(1, x, y);
+		setCursor(x,y,1);
 		soundBleep();
 		for(j = 4; j > 0; --j) {
 			WAIT_WHILE_RASTERLINE_LOW
 			WAIT_WHILE_RASTERLINE_HIGH
 		}
-		setCellColor(FIELDCOLOR, x, y);
+		setCursor(x,y,FIELDCOLOR);
 		for(j = 4; j > 0; --j) {
 			WAIT_WHILE_RASTERLINE_LOW
 			WAIT_WHILE_RASTERLINE_HIGH
@@ -110,32 +93,34 @@ void drawAtoms(char x, char y) {
 	char count = getAtoms(field, x, y);
 	char color = playercolors[getOwner(field, x, y)];
 	int pos = 0;
+	char idx = (y * SIZEX) + x;
+	
+	*((char*)&sprite_field_ptrs + idx) = 200 + count;
+	*((char*)&sprite_field_colors + idx) = color;
 
-	pos += FIELDOFF;
-	pos += (x * 3);
-	pos += (y * 120);
-	pos += 41;
-	*((char*)(COLORRAM + pos)) = color;
-	*((char*)(TEXTBASE + pos++)) = count > 0 ? CHAR_ATOM : CHAR_SPACE;
-
-	*((char*)(COLORRAM + pos)) = color;
-	*((char*)(TEXTBASE + pos++)) = count > 1 ? CHAR_ATOM : CHAR_SPACE;
-	pos += 38;
-	*((char*)(COLORRAM + pos)) = color;
-	*((char*)(TEXTBASE + pos++)) = count > 2 ? CHAR_ATOM : CHAR_SPACE;
-
-	*((char*)(COLORRAM + pos)) = color;
-	*((char*)(TEXTBASE + pos++)) = count > 3 ? CHAR_ATOM : CHAR_SPACE;
 }
 
 void drawField() {
 	char x, y;
 	for(x = 0; x < SIZEX; ++x) {
 		for(y = 0; y < SIZEY; ++y) {
-			drawCell(x,y);
+			//drawCell(x,y);
 			drawAtoms(x,y);
 		}
 	}
+	draw_field = 1;
+}
+
+void hideField() {
+	draw_field = 0;
+	VIC.spr_ena = 0;
+}
+
+
+void setCursor(char x, char y, char color) {
+	cursor_x = 100 + (x * 28);
+	cursor_y = 66 + (y * 28);
+	cursor_color = color;
 }
 
 
@@ -149,6 +134,11 @@ unsigned int getBankAddress() {
 	char base = 3 - getBank();
 	return 0x4000 * base;
 }
+
+unsigned int getSpriteAddress(char spriteidx) {
+	return getBankAddress() + (spriteidx * 64);
+}
+
 
 void switchBank(char pos) {
 	// valid values for pos are 0 to 3
@@ -251,13 +241,15 @@ void setCharsetPosition(unsigned char pos) {
 
 void displayPlayerSprite(char player) {
 	int xpos = SPRITE_PLAYER_X;
-	VIC.spr_ena = 0;
 	WAIT_WHILE_RASTERLINE_LOW
-	if(player == PLAYERAI && ki) memcpy((char*) SPRITE0_DATA, sprComputer, 63);
-	else memcpy((char*) SPRITE0_DATA, sprHuman, 63);
-	*((char*)SPRITE0_PTR) = SPRITE0_DATA >> 6;
-	if(player > 1) xpos += 230;
-	VIC.spr_ena = 1;
+
+	if(player == PLAYERAI && ki) {
+		*((char*)SPRITE0_PTR) = COMPUTER_PTR;
+	} else {
+		*((char*)SPRITE0_PTR) = HUMAN_PTR;
+	}
+	
+	if(player > 1) xpos += 240;
 	VIC.spr_color[0] = playercolors[player];
 	VIC.spr_pos[0].x = (char)xpos & 0xFF;
 	VIC.spr_pos[0].y = SPRITE_PLAYER_Y;
