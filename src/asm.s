@@ -3,6 +3,7 @@
 .export _colorwashrow
 .export _colorwashcolstart
 .export _colorwashcolend
+.export _play_music
 .export _draw_field
 .export _cursor_x
 .export _cursor_y
@@ -64,6 +65,8 @@ _cursor_color: .byte 1
 
 ; switch to enable/disable sprite-based game field
 _draw_field: .byte 0
+; switch to enable/disable music
+_play_music: .byte 1
 
 ; some assembler variables for setting up the sprite-based game field
 row0 = 66
@@ -330,7 +333,10 @@ col_inc = 28
 .proc _interrupt_music
 	dec $d019 ; acknowledge IRQ
 
+	lda _play_music
+	beq skip_music
 	jsr sid_play ; #### play SID
+	skip_music:
 
 	dec _clock;
 	bne timer_not_expired ; only do custom interrupt if clock is zero

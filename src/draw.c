@@ -4,7 +4,7 @@
 #include "sound.h"
 #include "petscii.h"
 
-extern char draw_field,cursor_x,cursor_y,cursor_color;
+extern char play_music,draw_field,cursor_x,cursor_y,cursor_color;
 extern char* sprite_field_ptrs;
 extern char* sprite_field_colors;
 
@@ -108,11 +108,14 @@ void drawField() {
 			drawAtoms(x,y);
 		}
 	}
+	play_music = 0;
+	soundMute();
 	draw_field = 1;
 }
 
 void hideField() {
 	draw_field = 0;
+	play_music = 1;
 	VIC.spr_ena = 0;
 }
 
