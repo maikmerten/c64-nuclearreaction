@@ -359,7 +359,7 @@ col_inc = 32
 
 		lda #<_interrupt_row0 ; next interrupt vector
 		ldx #>_interrupt_row0
-		ldy #row0 - 2 ; raster line for next interrupt
+		ldy #row0 - 4 ; raster line for next interrupt
 		jsr _setup_next_interrupt 
 
 		; set up configuration for sprite based game field
@@ -388,7 +388,7 @@ col_inc = 32
 
 	lda #<_interrupt_row1 ; next interrupt vector
 	ldx #>_interrupt_row1
-	ldy #row1 - 2 ; raster line for next interrupt
+	ldy #row1 - 4 ; raster line for next interrupt
 	jsr _setup_next_interrupt 
 
 	jmp $ea81 ; return to kernel interrupt routine	
@@ -404,7 +404,7 @@ col_inc = 32
 
 	lda #<_interrupt_row2 ; next interrupt vector
 	ldx #>_interrupt_row2
-	ldy #row2 - 2 ; raster line for next interrupt
+	ldy #row2 - 4 ; raster line for next interrupt
 	jsr _setup_next_interrupt 
 
 	jmp $ea81 ; return to kernel interrupt routine	
@@ -420,7 +420,7 @@ col_inc = 32
 
 	lda #<_interrupt_row3 ; next interrupt vector
 	ldx #>_interrupt_row3
-	ldy #row3 - 2 ; raster line for next interrupt
+	ldy #row3 - 4 ; raster line for next interrupt
 	jsr _setup_next_interrupt 
 
 	jmp $ea81 ; return to kernel interrupt routine	
@@ -436,7 +436,7 @@ col_inc = 32
 
 	lda #<_interrupt_row4 ; next interrupt vector
 	ldx #>_interrupt_row4
-	ldy #row4 - 2 ; raster line for next interrupt
+	ldy #row4 - 4 ; raster line for next interrupt
 	jsr _setup_next_interrupt 
 
 	jmp $ea81 ; return to kernel interrupt routine	
