@@ -80,11 +80,10 @@ signed int evaluateField(char f[SIZEX][SIZEY], char p) {
 
 int thinkAI() {
 	unsigned char x,y,size,owner;
-	signed int tmp,score,oppscore,loss;
+	signed int tmp,score;
 	unsigned int result;
 	size = SIZEX * SIZEY;
 	// compute the field score for the opposing player
-	oppscore = evaluateField(field, 1);
 	score = -32000;
 	for(x = 0; x < SIZEX; ++x) {
 		for(y = 0; y < SIZEY; ++y) {
@@ -106,9 +105,6 @@ int thinkAI() {
 				
 				// evaluate the resulting field constellation
 				tmp += evaluateField(fieldAI, PLAYERAI);
-				// add loss of the opposing player
-				loss = oppscore - evaluateField(fieldAI, 1);
-				tmp += loss;
 
 				if(tmp > score || (tmp == score && (rand() & 0x01))) {
 					score = tmp;
