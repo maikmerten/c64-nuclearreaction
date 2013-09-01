@@ -9,8 +9,6 @@
 
 extern unsigned char playercolors[3];
 extern unsigned char ki;
-extern const char sprHuman[]; // text.s
-extern const char sprComputer[]; // text.s
 
 
 void clearScreen(char textcolor);
