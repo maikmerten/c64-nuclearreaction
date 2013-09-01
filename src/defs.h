@@ -28,6 +28,7 @@
 
 
 // position of sprites in VIC bank
+#define EXPLOSION_PTR 197
 #define HUMAN_PTR 198
 #define COMPUTER_PTR 199
 #define CELL0_PTR 200

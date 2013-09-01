@@ -149,6 +149,11 @@ void loadAssets() {
 	fread((char*)0x7000, 1, 4096, f);
 	fclose(f);
 
+	// loading sprite for explosion
+	f = fopen("explosion","r");
+	fread((char*)getSpriteAddress(EXPLOSION_PTR), 1, 63, f);
+	fclose(f);
+	
 	// loading sprite for human player
 	f = fopen("human","r");
 	fread((char*)getSpriteAddress(HUMAN_PTR), 1, 63, f);

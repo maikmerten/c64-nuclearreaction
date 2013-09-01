@@ -14,6 +14,7 @@ nuclear: src/nuclear.c src/draw.h src/draw.c src/field.h src/field.c src/ai.h sr
 	c1541 -attach nuclear.d64 -write src/resources/cursor.raw cursor
 	c1541 -attach nuclear.d64 -write src/resources/human.raw human
 	c1541 -attach nuclear.d64 -write src/resources/computer.raw computer
+	c1541 -attach nuclear.d64 -write src/resources/explosion.raw explosion
 
 clean:
 	$(RM) nuclear

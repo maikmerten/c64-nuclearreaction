@@ -97,6 +97,27 @@ void highlightCell(char x, char y) {
 
 }
 
+void highlightCellExplosion(char x, char y) {
+	char i = 0;
+	char idx = y * SIZEX + x;
+	char spriteidx = *((char*)&sprite_field_ptrs + idx);
+	char spritecolor = *((char*)&sprite_field_colors + idx);
+	
+	*((char*)&sprite_field_ptrs + idx) = EXPLOSION_PTR;
+	*((char*)&sprite_field_colors + idx) = 7; // yellow
+	
+	// wait a few frames
+	for(i = 0; i < 5; ++i) {
+		WAIT_WHILE_RASTERLINE_LOW
+		WAIT_WHILE_RASTERLINE_HIGH
+	}
+	
+	// restore original values
+	*((char*)&sprite_field_ptrs + idx) = spriteidx;
+	*((char*)&sprite_field_colors + idx) = spritecolor;
+	
+}
+
 
 void drawAtoms(char x, char y) {
 	char count = getAtoms(field, x, y);
