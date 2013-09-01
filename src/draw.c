@@ -34,34 +34,43 @@ void drawCell(char x, char y) {
 	}
 
 	pos += FIELDOFF;
-	pos += (x * 3);
-	pos += (y * 120);
+	pos += (x * 4);
+	pos += (y * 160);
 
 	*((char*)pos++) = tl;
+	*((char*)pos++) = CHAR_HOR;
 	*((char*)pos++) = CHAR_HOR;
 	*((char*)pos++) = CHAR_HOR;
 	if(x == MAXX) {
 		*((char*)pos) = (y == 0 ? CHAR_COR_TR : CHAR_CROSS_R);
 	}
-	pos += 37;
+	pos += 36;
 	*((char*)pos) = CHAR_VER;
-	pos += 3;
+	pos += 4;
 	if(x == MAXX) {
 		*((char*)pos) = CHAR_VER;
 	}
-	pos += 37;
+	pos += 36;
 	*((char*)pos) = CHAR_VER;
-	pos += 3;
+	pos += 4;
+	if(x == MAXX) {
+		*((char*)pos) = CHAR_VER;
+	}
+	
+	pos += 36;
+	*((char*)pos) = CHAR_VER;
+	pos += 4;
 	if(x == MAXX) {
 		*((char*)pos) = CHAR_VER;
 	}
 
 	if(y == MAXY) {
-		pos += 37;
+		pos += 36;
 		if(x == 0) {
 			*((char*)pos) = CHAR_COR_BL;
 		}
 		pos += 1;
+		*((char*)pos++) = CHAR_HOR;
 		*((char*)pos++) = CHAR_HOR;
 		*((char*)pos++) = CHAR_HOR;
 		*((char*)pos) = (x == MAXX ? CHAR_COR_BR : CHAR_CROSS_B);
@@ -104,7 +113,7 @@ void drawField() {
 	char x, y;
 	for(x = 0; x < SIZEX; ++x) {
 		for(y = 0; y < SIZEY; ++y) {
-			//drawCell(x,y);
+			drawCell(x,y);
 			drawAtoms(x,y);
 		}
 	}
@@ -121,8 +130,8 @@ void hideField() {
 
 
 void setCursor(char x, char y, char color) {
-	cursor_x = 100 + (x * 28);
-	cursor_y = 66 + (y * 28);
+	cursor_x = 88 + (x * 32);
+	cursor_y = 75 + (y * 32);
 	cursor_color = color;
 }
 
@@ -252,7 +261,7 @@ void displayPlayerSprite(char player) {
 		*((char*)SPRITE0_PTR) = HUMAN_PTR;
 	}
 	
-	if(player > 1) xpos += 240;
+	if(player > 1) xpos += 255;
 	VIC.spr_color[0] = playercolors[player];
 	VIC.spr_pos[0].x = (char)xpos & 0xFF;
 	VIC.spr_pos[0].y = SPRITE_PLAYER_Y;
@@ -271,6 +280,6 @@ void printHUD(char player, char color, char move, char ki) {
 		else cputsxy(8,0, "active player: player 2");
 	}
 	sprintf(buf, "move  %-3i", move);
-	cputsxy(16,20, buf);
+	cputsxy(16,24, buf);
 }
 

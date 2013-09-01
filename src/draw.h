@@ -6,6 +6,15 @@
 #define VICBANKTEXT 2
 #define VICBANKBITMAP 3
 
+// definitions of field screen position and color
+#define FIELDOFF 87
+#define FIELDCOLOR 11
+
+// definitions for player sprites in HUD
+#define SPRITE0_PTR     34808
+#define SPRITE_PLAYER_X 30
+#define SPRITE_PLAYER_Y 125
+
 
 extern unsigned char playercolors[3];
 extern unsigned char ki;

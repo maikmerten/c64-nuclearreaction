@@ -47,6 +47,7 @@ void gameloop() {
 	signed char posx,posy; // signed for simple detection of underflow
 	char up,down,left,right,fire,wait,owner;
 	int airesult;
+	char textbuf[28];
 
 	clearScreen(FIELDCOLOR);
 	clearField();
@@ -112,29 +113,36 @@ void gameloop() {
 		}
 	}
 
-	textcolor(1);
-	if(winner == 1) cputsxy(13, 22, "player 1 won");
-	else if(winner == 2) {
-		if(ki) cputsxy(11, 22, "the computer won");
-		else cputsxy(13, 22, "player 2 won");
+	posx = 8;
+	posy = 24;
+	if(winner == 1) {
+		sprintf(textbuf, "player 1 won in %i moves", move);
+	} else if(winner == 2) {
+		if(ki) {
+			sprintf(textbuf, "the computer won in %i moves", move);
+			posx -= 2;
+		} else {
+			sprintf(textbuf, "player 2 won in %i moves", move);
+		}
 	}
-	
-	// enable triumphant color wash
-	colorwashrow = 22;
-	colorwashcolstart = 11;
-	colorwashcolend = 26;
 
-	wait = 0;
-	cputsxy(8, 24, "press fire to continue");
-
-	fire = 0;
-	do {
-		WAIT_WHILE_RASTERLINE_HIGH
-		fire = isInputAction();
-		VIC.spr_pos[0].y = (SPRITE_PLAYER_Y + (wait >> 7));
-		++wait;
-		WAIT_WHILE_RASTERLINE_HIGH
-	} while(!fire);
-
+	if(winner != 0) {
+		cputsxy(posx, posy, textbuf);
+		// enable triumphant color wash
+		colorwashrow = 24;
+		colorwashcolstart = 0;
+		colorwashcolend = 39;
+		
+		wait = 0;
+		fire = 0;
+		do {
+			WAIT_WHILE_RASTERLINE_HIGH
+			fire = isInputAction();
+			VIC.spr_pos[0].y = (SPRITE_PLAYER_Y + (wait >> 7));
+			++wait;
+			WAIT_WHILE_RASTERLINE_HIGH
+		} while(!fire);
+	}
+	colorwashrow = 25;
 }
 
