@@ -86,20 +86,22 @@ void spreadAtoms(char f[SIZEX][SIZEY], char x, char y, char p, char draw) {
 
 
 void react(char f[SIZEX][SIZEY], char draw) {
-	char stable,count,x,y,iter,player;
-	iter = 16;
+	char stable,count,x,y,player,players;
 	stable = 0;
-	while(!stable && iter > 0) {
+	while(!stable) {
 		stable = 1;
+		players = 0;
 		for(x = 0; x < SIZEX; ++x) {
 			for(y = 0; y < SIZEY; ++y) {
 				count = getAtoms(f, x, y);
+				player = getOwner(f, x, y);
+				players |= player;
 				if(count > getCapacity(x, y)) {
 					if(draw) {
 						soundExplode();
 						highlightCellExplosion(x, y);
 					}
-					player = getOwner(f, x, y);
+
 					stable = 0;
 					spreadAtoms(f, x, y, player, draw);
 					setAtoms(f, 0, x, y);
@@ -108,7 +110,11 @@ void react(char f[SIZEX][SIZEY], char draw) {
 				}
 			}
 		}
-		--iter;
+		
+		if(players < 3) {
+			// we only got player 1 or 2 left, no need for further reaction
+			stable = 1;
+		}
 	}
 }
 
