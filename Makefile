@@ -11,12 +11,14 @@ nuclear: src/nuclear.c src/draw.h src/draw.c src/field.h src/field.c src/ai.h sr
 		src/resources/human.raw \
 		src/resources/computer.raw \
 		src/resources/explosion.raw \
-		src/resources/time_portal_7000.sid > assets.bin
+		src/resources/title.koa \
+		src/resources/time_portal_7000.sid \
+		> assets.bin
 	c1541 -attach nuclear.d64 -write nuclear.prg nuclear.prg
-	c1541 -attach nuclear.d64 -write src/resources/title.koa title
 	c1541 -attach nuclear.d64 -write assets.bin nuclearass
 
 clean:
 	$(RM) nuclear
 	$(RM) nuclear.d64
+	$(RM) assets.bin
 	$(RM) src/*.o

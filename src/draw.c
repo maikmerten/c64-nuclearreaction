@@ -201,8 +201,7 @@ void switchBank(char pos) {
 }
 
 
-void showPicture(char* filename) {
-	FILE* f;
+void showPictureFromHandle(FILE* f) {
 	int i = 0;
 	int vicconf[3];
 
@@ -212,11 +211,9 @@ void showPicture(char* filename) {
 
 	VIC.spr_ena = 0;
 
-	f = fopen(filename, "r");
-	
 	// consume two bytes of header
 	i = fgetc(f);
-    i = fgetc(f);
+	i = fgetc(f);
 	
 	// 8000 bytes bitmap
 	fread((char*)(BANK3BASE + 8192), 1, 8000, f);
@@ -233,9 +230,6 @@ void showPicture(char* filename) {
 	// 1 byte background color
 	bgcolor((char) fgetc(f));
 	
-	// close input file
-	fclose(f);
-
 	// now that we copied the bitmap data, switch bank
 	switchBank(VICBANKBITMAP);
 
@@ -259,6 +253,13 @@ void showPicture(char* filename) {
 
 	clrscr();
 	bgcolor(0);
+}
+
+void showPicture(char* filename) {
+	FILE* f;
+	f = fopen(filename, "r");
+	showPictureFromHandle(f);
+	fclose(f);
 }
 
 void setCharsetPosition(unsigned char pos) {

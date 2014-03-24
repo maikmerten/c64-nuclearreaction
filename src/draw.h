@@ -30,6 +30,7 @@ void setCursor(char x, char y, char color);
 void highlightCell(char x, char y);
 void highlightCellExplosion(char x, char y);
 void printHUD(char player, char color, char move, char ki);
+void showPictureFromHandle(FILE* f);
 void showPicture(char* filename);
 void switchBank(char pos);
 void setCharsetPosition(char pos);

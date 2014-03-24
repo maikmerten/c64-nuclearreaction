@@ -201,13 +201,15 @@ void loadAssets() {
 	// loading sprite for explosion
 	fread((char*)getSpriteAddress(EXPLOSION_PTR), 1, 63, f);
 
+	showPictureFromHandle(f);
+
 	// loading SID tune to 0x7000
 	// skip first 126 bytes, header'n'stuff
 	fread((char*)0x7000, 1, 126, f);
-	// copy up to 4k of sid tune
+	// copy up to 4096 of SID tune
 	fread((char*)0x7000, 1, 4096, f);
+
 	fclose(f);
-	
 }
 
 
@@ -219,8 +221,6 @@ int main(void) {
 	*((char*)0x0291) = 128;
 
 	loadAssets();
-	
-	showPicture("title");
 
 	setupInterrupt();
 	
