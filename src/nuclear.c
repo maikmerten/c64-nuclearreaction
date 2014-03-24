@@ -126,11 +126,12 @@ char gamemenu() {
 
 void loadAssets() {
 	FILE* f;
+
+	// open file with assets
+	f = fopen("nuclearass","r");
 	
 	// upload custom font into bank for text display
-	f = fopen("font","r");
 	fread((char*)(32768 + 14336), 1, 2048, f);
-	fclose(f);
 	
 	bordercolor(0);
 	bgcolor(0);
@@ -141,57 +142,30 @@ void loadAssets() {
 	setCharsetPosition(7);
 	cputsxy(15,12, "loading...");
 	
+	// loading sprite for empty game field cell
+	fread((char*)getSpriteAddress(CELL0_PTR), 1, 63, f);
+	// loading sprite for game field cell with 1 atom
+	fread((char*)getSpriteAddress(CELL1_PTR), 1, 63, f);
+	// loading sprite for game field cell with 2 atoms
+	fread((char*)getSpriteAddress(CELL2_PTR), 1, 63, f);
+	// loading sprite for game field cell with 3 atoms
+	fread((char*)getSpriteAddress(CELL3_PTR), 1, 63, f);
+	// loading sprite for game field cell with 4 atoms
+	fread((char*)getSpriteAddress(CELL4_PTR), 1, 63, f);
+	// loading sprite for game field cursor
+	fread((char*)getSpriteAddress(CURSOR_PTR), 1, 63, f);
+	// loading sprite for human player
+	fread((char*)getSpriteAddress(HUMAN_PTR), 1, 63, f);
+	// loading sprite for computer player
+	fread((char*)getSpriteAddress(COMPUTER_PTR), 1, 63, f);
+	// loading sprite for explosion
+	fread((char*)getSpriteAddress(EXPLOSION_PTR), 1, 63, f);
+
 	// loading SID tune to 0x7000
-	f = fopen("music","r");
 	// skip first 126 bytes, header'n'stuff
 	fread((char*)0x7000, 1, 126, f);
 	// copy up to 4k of sid tune
 	fread((char*)0x7000, 1, 4096, f);
-	fclose(f);
-
-	// loading sprite for explosion
-	f = fopen("explosion","r");
-	fread((char*)getSpriteAddress(EXPLOSION_PTR), 1, 63, f);
-	fclose(f);
-	
-	// loading sprite for human player
-	f = fopen("human","r");
-	fread((char*)getSpriteAddress(HUMAN_PTR), 1, 63, f);
-	fclose(f);
-	
-	// loading sprite for computer player
-	f = fopen("computer","r");
-	fread((char*)getSpriteAddress(COMPUTER_PTR), 1, 63, f);
-	fclose(f);
-	
-	// loading sprite for empty game field cell
-	f = fopen("cell0","r");
-	fread((char*)getSpriteAddress(CELL0_PTR), 1, 63, f);
-	fclose(f);
-	
-	// loading sprite for game field cell with 1 atom
-	f = fopen("cell1","r");
-	fread((char*)getSpriteAddress(CELL1_PTR), 1, 63, f);
-	fclose(f);
-
-	// loading sprite for game field cell with 2 atoms
-	f = fopen("cell2","r");
-	fread((char*)getSpriteAddress(CELL2_PTR), 1, 63, f);
-	fclose(f);
-	
-	// loading sprite for game field cell with 3 atoms
-	f = fopen("cell3","r");
-	fread((char*)getSpriteAddress(CELL3_PTR), 1, 63, f);
-	fclose(f);
-	
-	// loading sprite for game field cell with 4 atoms
-	f = fopen("cell4","r");
-	fread((char*)getSpriteAddress(CELL4_PTR), 1, 63, f);
-	fclose(f);
-	
-	// loading sprite for game field cursor
-	f = fopen("cursor","r");
-	fread((char*)getSpriteAddress(CURSOR_PTR), 1, 63, f);
 	fclose(f);
 	
 }
