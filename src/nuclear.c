@@ -54,6 +54,46 @@ void showhelp() {
 
 }
 
+void showhelp2() {
+	clearScreen(1);
+	textcolor(14);
+
+	cputsxy(0,0,  "about this game:");
+
+	cputsxy(0,2,  "original amiga game developed by robert");
+	cputsxy(0,3,  "akerberg. music by richard bayliss.");
+	cputsxy(0,4,  "developed for the c64 by maik merten.");
+
+	cputsxy(0,6,  "how to play:");
+
+	cputsxy(0,8,  "players place atoms in turns. each");
+	cputsxy(0,9,  "field explodes when reaching a certain");
+	cputsxy(0,10, "number of atoms.");
+
+	cputsxy(0,12, "corners: 2 atoms");
+	cputsxy(0,13, "  edges: 3 atoms");
+	cputsxy(0,14, "  other: 4 atoms");
+
+	cputsxy(0,16, "upon explosion fields distribute atoms");
+	cputsxy(0,17, "into neighbouring fields, which are now");
+	cputsxy(0,18, "owned by the owner of the exploding");
+	cputsxy(0,19, "field. if newly aquired fields reach");
+	cputsxy(0,20, "their threshold, they in turn explode,");
+	cputsxy(0,21, "possibly causing a chain reaction.");
+
+	cputsxy(0,23, "a player wins if no fields are left to");
+	cputsxy(0,24, "the other player.");
+
+	while(1) {
+		char wait;
+		for(wait = 8; wait > 0; --wait) {
+			WAIT_WHILE_RASTERLINE_LOW
+			WAIT_WHILE_RASTERLINE_HIGH
+		}
+		if(isInputAction()) break;
+	}
+}
+
 
 char gamemenu() {
 	char up,down,quit,selected,wait,update;
@@ -188,7 +228,7 @@ int main(void) {
 		if(gamemenu()) break;
 		colorwashrow = 25; // disable colorwash
 		if(help) {
-			showhelp();
+			showhelp2();
 		} else {
 			// consume all key presses
 			while(kbhit()) cgetc();
