@@ -18,6 +18,41 @@ _tmp16: .res 2
 
 .segment "CODE"
 
+; ################ binary includes ###################
+
+.export _customfont
+_customfont: .incbin "resources/nuclearfont"
+
+.export _music
+; include SID file, skip 126 bytes (header)
+_music: .incbin "resources/time_portal_7000.sid",126
+
+.export _spr_cell0
+_spr_cell0: .incbin "resources/cell0.raw"
+.export _spr_cell1
+_spr_cell1: .incbin "resources/cell1.raw"
+.export _spr_cell2
+_spr_cell2: .incbin "resources/cell2.raw"
+.export _spr_cell3
+_spr_cell3: .incbin "resources/cell3.raw"
+.export _spr_cell4
+_spr_cell4: .incbin "resources/cell4.raw"
+
+.export _spr_human
+_spr_human: .incbin "resources/human.raw"
+
+.export _spr_computer
+_spr_computer: .incbin "resources/computer.raw"
+
+.export _spr_explosion
+_spr_explosion: .incbin "resources/explosion.raw"
+
+.export _spr_cursor
+_spr_cursor: .incbin "resources/cursor.raw"
+
+
+; ############ end of binary includes ##############
+
 
 sid_init = $7000
 sid_play = $7003

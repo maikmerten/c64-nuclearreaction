@@ -18,6 +18,10 @@ extern char colorwashrow; // asm.s
 extern char colorwashcolstart; // asm.s
 extern char colorwashcolend; // asm.s
 
+// binary includes from asm.s
+extern char* customfont, music;
+extern char* spr_cell0,spr_cell1,spr_cell2,spr_cell3,spr_cell4,spr_human,spr_computer,spr_explosion,spr_cursor;
+
 unsigned char help;
 
 
@@ -165,51 +169,38 @@ char gamemenu() {
 }
 
 void loadAssets() {
-	FILE* f;
-
-	// open file with assets
-	f = fopen("nuclearass","r");
-	
-	// upload custom font into bank for text display
-	fread((char*)(32768 + 14336), 1, 2048, f);
 	
 	bordercolor(0);
 	bgcolor(0);
 	clearScreen(1);
-	textcolor(1);
-	
+
+	// upload custom font into bank for text display
+	memcpy((char*)(32768 + 14336),(char*)&customfont, 2048);
+
 	// enable custom charset
 	setCharsetPosition(7);
-	cputsxy(15,12, "loading...");
 	
 	// loading sprite for empty game field cell
-	fread((char*)getSpriteAddress(CELL0_PTR), 1, 63, f);
+	memcpy((char*)getSpriteAddress(CELL0_PTR),(char*)&spr_cell0, 63);
 	// loading sprite for game field cell with 1 atom
-	fread((char*)getSpriteAddress(CELL1_PTR), 1, 63, f);
+	memcpy((char*)getSpriteAddress(CELL1_PTR),(char*)&spr_cell1, 63);
 	// loading sprite for game field cell with 2 atoms
-	fread((char*)getSpriteAddress(CELL2_PTR), 1, 63, f);
+	memcpy((char*)getSpriteAddress(CELL2_PTR),(char*)&spr_cell2, 63);
 	// loading sprite for game field cell with 3 atoms
-	fread((char*)getSpriteAddress(CELL3_PTR), 1, 63, f);
+	memcpy((char*)getSpriteAddress(CELL3_PTR),(char*)&spr_cell3, 63);
 	// loading sprite for game field cell with 4 atoms
-	fread((char*)getSpriteAddress(CELL4_PTR), 1, 63, f);
+	memcpy((char*)getSpriteAddress(CELL4_PTR),(char*)&spr_cell4, 63);
 	// loading sprite for game field cursor
-	fread((char*)getSpriteAddress(CURSOR_PTR), 1, 63, f);
+	memcpy((char*)getSpriteAddress(CURSOR_PTR),(char*)&spr_cursor, 63);
 	// loading sprite for human player
-	fread((char*)getSpriteAddress(HUMAN_PTR), 1, 63, f);
+	memcpy((char*)getSpriteAddress(HUMAN_PTR),(char*)&spr_human, 63);
 	// loading sprite for computer player
-	fread((char*)getSpriteAddress(COMPUTER_PTR), 1, 63, f);
+	memcpy((char*)getSpriteAddress(COMPUTER_PTR),(char*)&spr_computer, 63);
 	// loading sprite for explosion
-	fread((char*)getSpriteAddress(EXPLOSION_PTR), 1, 63, f);
+	memcpy((char*)getSpriteAddress(EXPLOSION_PTR),(char*)&spr_explosion, 63);
 
-	showPictureFromHandle(f);
-
-	// loading SID tune to 0x7000
-	// skip first 126 bytes, header'n'stuff
-	fread((char*)0x7000, 1, 126, f);
 	// copy up to 4096 of SID tune
-	fread((char*)0x7000, 1, 4096, f);
-
-	fclose(f);
+	memcpy((char*)0x7000, (char*)&music, 4096);
 }
 
 
