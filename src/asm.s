@@ -4,6 +4,7 @@
 .export _colorwashcolstart
 .export _colorwashcolend
 .export _play_music
+.export _init_music
 .export _draw_field
 .export _cursor_x
 .export _cursor_y
@@ -102,6 +103,8 @@ _cursor_color: .byte 1
 _draw_field: .byte 0
 ; switch to enable/disable music
 _play_music: .byte 1
+; does music need to be initialized?
+_init_music: .byte 1
 
 ; some assembler variables for setting up the sprite-based game field
 row0 = 75
@@ -212,8 +215,6 @@ col_inc = 32
 	; reset clock
 	ldy #clock_init;
 	sty _clock;
-
-	jsr sid_init ; #### init SID
 
 	; Save interrupt request mask
 	ldy $d01a
@@ -367,6 +368,14 @@ col_inc = 32
 
 .proc _interrupt_music
 	dec $d019 ; acknowledge IRQ
+
+
+	lda _init_music
+	beq skip_music_init
+	jsr sid_init ; #### init SID
+	lda #0
+	sta _init_music
+	skip_music_init:
 
 	lda _play_music
 	beq skip_music
