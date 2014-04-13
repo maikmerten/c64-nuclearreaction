@@ -1,5 +1,4 @@
 time_portal_7000.sid is a version of Richard Bayliss' Time_Portal.sid relocated
 to 0x7000 for memory management reasons. This tune is used with permission
 by Richard Bayliss. It can be distributed freely, but is not subject to the
-GPL and does not become part of the compiled binary, being loaded from disk
-on startup instead.
+GPL.
