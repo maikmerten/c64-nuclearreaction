@@ -1,6 +1,9 @@
 #include "ai.h"
 #include "field.h"
 
+extern void enableTurbo(); // asm.s
+extern void disableTurbo(); // asm.s
+
 unsigned char fieldAI[SIZEX][SIZEY];
 
 char isCritical(char f[SIZEX][SIZEY], char x, char y) {
@@ -82,6 +85,9 @@ int thinkAI() {
 	unsigned char x,y,size,owner;
 	signed int tmp,score;
 	unsigned int result;
+	
+	enableTurbo();
+	
 	size = SIZEX * SIZEY;
 	// compute the field score for the opposing player
 	score = -32000;
@@ -113,6 +119,9 @@ int thinkAI() {
 			}
 		}
 	}
+	
+	disableTurbo();
+	
 	return result;
 }
 

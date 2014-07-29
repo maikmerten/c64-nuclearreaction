@@ -14,8 +14,6 @@
 
 extern void setupInterrupt(); // asm.s
 extern void disableInterrupt(); // asm.s
-extern void enableTurbo(); // asm.s
-extern void disableTurbo(); // asm.s
 extern char colorwashrow; // asm.s
 extern char colorwashcolstart; // asm.s
 extern char colorwashcolend; // asm.s
@@ -236,7 +234,6 @@ int main(void) {
 	loadAssets();
 
 	setupInterrupt();
-	enableTurbo();
 	
 	while(1) {
 		if(gamemenu()) break;
@@ -251,7 +248,6 @@ int main(void) {
 		}
 	}
 
-	disableTurbo();
 	disableInterrupt();
 	
 	soundMute();
