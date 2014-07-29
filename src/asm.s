@@ -12,6 +12,8 @@
 .export _cursor_color
 .export _sprite_field_ptrs
 .export _sprite_field_colors
+.export _enableTurbo
+.export _disableTurbo
 
 .zeropage
 
@@ -512,4 +514,53 @@ col_inc = 32
 
 	jmp $ea31 ; return to kernel interrupt routine (with keyboard)
 
+.endproc
+
+
+.proc _enableTurbo : near
+	pha
+
+	lda $D0FE		; load value of $D0FE
+	pha				; ... and save
+	lda #$2A
+	sta $D0FE
+	lda $D0FE
+	cmp #$FF		; Chameleon will NOT be $FF
+	beq end
+
+	lda $D0F3		; load turbo configuration register
+	ora #$80		; set turbo enabled bit
+	sta $D0F3
+
+end:
+	pla				; retrieve backup of $D0FE
+	sta $D0FE		; restore
+
+	pla
+	rts
+.endproc
+
+
+.proc _disableTurbo : near
+
+	pha
+
+	lda $D0FE		; load value of $D0FE
+	pha				; ... and save
+	lda #$2A
+	sta $D0FE
+	lda $D0FE
+	cmp #$FF		; Chameleon will NOT be $FF
+	beq end
+
+	lda $D0F3		; load turbo configuration register
+	and #$7F		; clear turbo enabled bit
+	sta $D0F3
+
+end:
+	pla				; retrieve backup of $D0FE
+	sta $D0FE		; restore
+
+	pla
+	rts
 .endproc
