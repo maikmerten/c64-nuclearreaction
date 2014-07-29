@@ -62,16 +62,19 @@ void showhelp() {
 
 void showhelp2() {
 	clearScreen(1);
-	textcolor(14);
 
+	textcolor(1);
 	cputsxy(0,0,  "about this game:");
 
+	textcolor(14);
 	cputsxy(0,2,  "original amiga game developed by robert");
 	cputsxy(0,3,  "akerberg. music by richard bayliss.");
 	cputsxy(0,4,  "developed for the c64 by maik merten.");
 
+	textcolor(1);
 	cputsxy(0,6,  "how to play:");
 
+	textcolor(14);
 	cputsxy(0,8,  "players place atoms in turns. each");
 	cputsxy(0,9,  "field explodes when reaching a certain");
 	cputsxy(0,10, "number of atoms.");
@@ -100,6 +103,20 @@ void showhelp2() {
 	}
 }
 
+char isChameleon() {
+	char result = 0;
+	char* ptr = (char*)0xD0FE;
+	char val;
+	
+	*ptr = 0x2A;
+	val = *ptr;
+	if(val != 0xFF) {
+		result = 1;
+	}
+	*ptr = 0xFF;
+	
+	return result;
+}
 
 char gamemenu() {
 	char up,down,quit,selected,wait,update;
@@ -150,6 +167,9 @@ char gamemenu() {
 			cputsxy(3, 13, "   quit");
 			textcolor(1);
 			cputsxy(4, 3 * item + 4, "Q");
+			if(isChameleon()) {
+				cputsxy(32, 22, "turbo!");
+			}
 			update = 0;
 		}
 			
