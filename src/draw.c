@@ -103,7 +103,7 @@ void drawAtoms(char x, char y) {
 	char idx = (y * SIZEX) + x;
 	
 	*((char*)&sprite_field_ptrs + idx) = 200 + count;
-	*((char*)&sprite_field_colors + idx) = color;
+	*((char*)&sprite_field_colors + idx) = 1;
 
 	pos += FIELDOFF;
 	pos += (x * 5);

@@ -109,14 +109,14 @@ _play_music: .byte 1
 _init_music: .byte 1
 
 ; some assembler variables for setting up the sprite-based game field
-row0 = 55
+row0 = 47
 row_inc = 40
 row1 = row0 + 1 * row_inc
 row2 = row0 + 2 * row_inc
 row3 = row0 + 3 * row_inc
 row4 = row0 + 4 * row_inc
 
-col0 = 28
+col0 = 22
 col_inc = 40
 
 
@@ -293,15 +293,10 @@ col_inc = 40
 	lda #$FF
 	sta $D015 ; enable all sprites
 
-	; enable multicolor mode for sprites 2 to 7
-	lda #$FC
+	; all sprits are single colored
+	lda #$00
 	sta $D01C
 
-	; set multicolor colors for sprites
-	lda #11
-	sta $D025
-	lda #1
-	sta $D026
 
 	lda #col0
 	sta $D004 ; x position sprite 2
@@ -326,6 +321,11 @@ col_inc = 40
 	sta $D00B ; y position sprite 5
 	sta $D00D ; y position sprite 6
 	sta $D00F ; y position sprite 7
+
+	; disable double-width and height mode (force update to VIC's sprite row counter)
+	lda #$00
+	sta $D01D
+	sta $D017
 
 	lda _sprite_field_ptrs,x
 	sta $87FA ; data pointer for sprite 2 in VIC bank 1
@@ -362,6 +362,11 @@ col_inc = 40
 	sta $87FF ; data pointer for sprite 7	
 	lda _sprite_field_colors,x
 	sta $D02E ; sprite color for sprite 7
+
+	; sprites 2 to 7 are double width and height
+	lda #$FC
+	sta $D01D
+	sta $D017
 
 	rts
 .endproc
