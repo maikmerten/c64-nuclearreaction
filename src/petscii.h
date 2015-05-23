@@ -35,7 +35,7 @@
 
 // patterns
 #define CHAR_EMPTY 96
-#define CHAR_FULL 224
+#define CHAR_FULL 160
 #define CHAR_HALF 102
 
 
