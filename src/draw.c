@@ -368,8 +368,8 @@ void hideField() {
 
 
 void setCursor(char x, char y, char color) {
-	cursor_x = 28 + (x * 40);
-	cursor_y = 55 + (y * 40);
+	cursor_x = 24 + (x * 40);
+	cursor_y = 50 + (y * 40);
 	cursor_color = color;
 }
 

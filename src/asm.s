@@ -111,10 +111,10 @@ _init_music: .byte 1
 ; some assembler variables for setting up the sprite-based game field
 row0 = 47
 row_inc = 40
-row1 = row0 + 1 * row_inc
-row2 = row0 + 2 * row_inc
-row3 = row0 + 3 * row_inc
-row4 = row0 + 4 * row_inc
+row1 = row0 + (1 * row_inc)
+row2 = row0 + (2 * row_inc)
+row3 = row0 + (3 * row_inc)
+row4 = row0 + (4 * row_inc)
 
 col0 = 22
 col_inc = 40
@@ -363,8 +363,8 @@ col_inc = 40
 	lda _sprite_field_colors,x
 	sta $D02E ; sprite color for sprite 7
 
-	; sprites 2 to 7 are double width and height
-	lda #$FC
+	; sprites 1 to 7 are double width and height
+	lda #$FE
 	sta $D01D
 	sta $D017
 
@@ -433,7 +433,7 @@ col_inc = 40
 .proc _interrupt_row0
 	dec $d019 ; acknowledge IRQ
 
-	lda #row0
+	lda #(row0 - 1)
 	ldx #0 ; index into array with sprite data pointers
 	jsr _update_sprite_cells
 
