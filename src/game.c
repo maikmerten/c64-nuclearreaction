@@ -138,8 +138,8 @@ void gameloop() {
 		do {
 			WAIT_WHILE_RASTERLINE_HIGH
 			fire = isInputAction();
-			VIC.spr_pos[0].y = (SPRITE_PLAYER_Y + (wait >> 7));
-			++wait;
+			//VIC.spr_pos[0].y = (SPRITE_PLAYER_Y + (wait >> 7));
+			//++wait;
 			WAIT_WHILE_RASTERLINE_HIGH
 		} while(!fire);
 	}

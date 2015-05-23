@@ -16,65 +16,40 @@ void clearScreen(char textcolor) {
 }
 
 void drawCell(char x, char y) {
-	char tl;
 	int pos = TEXTBASE;
 
-	if(x == 0) {
-		if(y == 0) {
-			tl = CHAR_COR_TL;
-		} else {
-			tl = CHAR_CROSS_L;
-		}
-	} else {
-		if(y == 0) {
-			tl = CHAR_CROSS_T;
-		} else {
-			tl = CHAR_CROSS;
-		}
-	}
-
 	pos += FIELDOFF;
-	pos += (x * 4);
-	pos += (y * 160);
+	pos += (x * 5);
+	pos += (y * (5 * 40));
 
-	*((char*)pos++) = tl;
-	*((char*)pos++) = CHAR_HOR;
-	*((char*)pos++) = CHAR_HOR;
-	*((char*)pos++) = CHAR_HOR;
-	if(x == MAXX) {
-		*((char*)pos) = (y == 0 ? CHAR_COR_TR : CHAR_CROSS_R);
-	}
-	pos += 36;
-	*((char*)pos) = CHAR_VER;
-	pos += 4;
-	if(x == MAXX) {
+	if(x < MAXX) {
+		pos += 4;
 		*((char*)pos) = CHAR_VER;
-	}
-	pos += 36;
-	*((char*)pos) = CHAR_VER;
-	pos += 4;
-	if(x == MAXX) {
+
+		pos += 40;
 		*((char*)pos) = CHAR_VER;
-	}
-	
-	pos += 36;
-	*((char*)pos) = CHAR_VER;
-	pos += 4;
-	if(x == MAXX) {
+
+		pos += 40;
 		*((char*)pos) = CHAR_VER;
+
+		pos += 40;
+		*((char*)pos) = CHAR_VER;
+	} else {
+		pos += (4 + 40 + 40 + 40);
 	}
 
-	if(y == MAXY) {
+	if(y < MAXY) {
 		pos += 36;
-		if(x == 0) {
-			*((char*)pos) = CHAR_COR_BL;
+    	*((char*)pos++) = CHAR_HOR;
+    	*((char*)pos++) = CHAR_HOR;
+    	*((char*)pos++) = CHAR_HOR;
+    	*((char*)pos++) = CHAR_HOR;
+		if(x < MAXX) {
+			*((char*)pos++) = CHAR_CROSS;
 		}
-		pos += 1;
-		*((char*)pos++) = CHAR_HOR;
-		*((char*)pos++) = CHAR_HOR;
-		*((char*)pos++) = CHAR_HOR;
-		*((char*)pos) = (x == MAXX ? CHAR_COR_BR : CHAR_CROSS_B);
 	}
+
+
 }
 
 
@@ -120,13 +95,251 @@ void highlightCellExplosion(char x, char y) {
 
 
 void drawAtoms(char x, char y) {
+	int pos = TEXTBASE;
+	int col = COLORRAM;
+
 	char count = getAtoms(field, x, y);
 	char color = playercolors[getOwner(field, x, y)];
-	int pos = 0;
 	char idx = (y * SIZEX) + x;
 	
 	*((char*)&sprite_field_ptrs + idx) = 200 + count;
 	*((char*)&sprite_field_colors + idx) = color;
+
+	pos += FIELDOFF;
+	pos += (x * 5);
+	pos += (y * (5 * 40));
+	col += FIELDOFF;
+	col += (x * 5);
+	col += (y * (5 * 40));
+
+	if(count == 0) {
+		*((char*)pos++) = 32;
+		*((char*)pos++) = 32;
+		*((char*)pos++) = 32;
+		*((char*)pos) = 32;
+
+		pos += 37;
+
+		*((char*)pos++) = 32;
+		*((char*)pos++) = 32;
+		*((char*)pos++) = 32;
+		*((char*)pos) = 32;
+
+		pos += 37;
+
+		*((char*)pos++) = 32;
+		*((char*)pos++) = 32;
+		*((char*)pos++) = 32;
+		*((char*)pos) = 32;
+
+		pos += 37;
+
+		*((char*)pos++) = 32;
+		*((char*)pos++) = 32;
+		*((char*)pos++) = 32;
+		*((char*)pos) = 32;
+
+	} else if(count == 1) {
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col) = color;
+
+		*((char*)pos++) = 32;
+		*((char*)pos++) = 32;
+		*((char*)pos++) = 32;
+		*((char*)pos) = 32;
+
+		pos += 37;
+		col += 37;
+
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col) = color;
+
+		*((char*)pos++) = 32;
+		*((char*)pos++) = 192;
+		*((char*)pos++) = 193;
+		*((char*)pos) = 32;
+
+		pos += 37;
+		col += 37;
+
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col) = color;
+
+		*((char*)pos++) = 32;
+		*((char*)pos++) = 224;
+		*((char*)pos++) = 225;
+		*((char*)pos) = 32;
+
+		pos += 37;
+		col += 37;
+
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col) = color;
+
+		*((char*)pos++) = 32;
+		*((char*)pos++) = 32;
+		*((char*)pos++) = 32;
+		*((char*)pos) = 32;
+
+	} else if(count == 2) {
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col) = color;
+
+		*((char*)pos++) = 32;
+		*((char*)pos++) = 32;
+		*((char*)pos++) = 32;
+		*((char*)pos) = 32;
+
+		pos += 37;
+		col += 37;
+
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col) = color;
+
+		*((char*)pos++) = 192;
+		*((char*)pos++) = 193;
+		*((char*)pos++) = 192;
+		*((char*)pos) = 193;
+
+		pos += 37;
+		col += 37;
+
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col) = color;
+
+		*((char*)pos++) = 224;
+		*((char*)pos++) = 225;
+		*((char*)pos++) = 224;
+		*((char*)pos) = 225;
+
+		pos += 37;
+		col += 37;
+
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col) = color;
+
+		*((char*)pos++) = 32;
+		*((char*)pos++) = 32;
+		*((char*)pos++) = 32;
+		*((char*)pos) = 32;
+
+	} else if(count == 3) {
+
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col) = color;
+
+		*((char*)pos++) = 192;
+		*((char*)pos++) = 193;
+		*((char*)pos++) = 192;
+		*((char*)pos) = 193;
+
+		pos += 37;
+		col += 37;
+
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col) = color;
+
+		*((char*)pos++) = 224;
+		*((char*)pos++) = 225;
+		*((char*)pos++) = 224;
+		*((char*)pos) = 225;
+
+		pos += 37;
+		col += 37;
+
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col) = color;
+
+		*((char*)pos++) = 192;
+		*((char*)pos++) = 193;
+		*((char*)pos++) = 32;
+		*((char*)pos) = 32;
+
+		pos += 37;
+		col += 37;
+
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col) = color;
+
+		*((char*)pos++) = 224;
+		*((char*)pos++) = 225;
+		*((char*)pos++) = 32;
+		*((char*)pos) = 32;
+
+	} else if(count == 4) {
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col) = color;
+
+		*((char*)pos++) = 192;
+		*((char*)pos++) = 193;
+		*((char*)pos++) = 192;
+		*((char*)pos) = 193;
+
+		pos += 37;
+		col += 37;
+
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col) = color;
+
+		*((char*)pos++) = 224;
+		*((char*)pos++) = 225;
+		*((char*)pos++) = 224;
+		*((char*)pos) = 225;
+
+		pos += 37;
+		col += 37;
+
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col) = color;
+
+		*((char*)pos++) = 192;
+		*((char*)pos++) = 193;
+		*((char*)pos++) = 192;
+		*((char*)pos) = 193;
+
+		pos += 37;
+		col += 37;
+
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col++) = color;
+		*((char*)col) = color;
+
+		*((char*)pos++) = 224;
+		*((char*)pos++) = 225;
+		*((char*)pos++) = 224;
+		*((char*)pos) = 225;
+	}
 
 }
 
@@ -155,8 +368,8 @@ void hideField() {
 
 
 void setCursor(char x, char y, char color) {
-	cursor_x = 88 + (x * 32);
-	cursor_y = 75 + (y * 32);
+	cursor_x = 28 + (x * 40);
+	cursor_y = 55 + (y * 40);
 	cursor_color = color;
 }
 
@@ -298,14 +511,14 @@ void displayPlayerSprite(char player) {
 
 void printHUD(char player, char color, char move, char ki) {
 	char buf[9];
-	displayPlayerSprite(player);
+	//displayPlayerSprite(player);
 	textcolor(color);
-	if(player == 1) cputsxy(8,0, "active player: player 1");
+	if(player == 1) cputsxy(31,0, "player 1");
 	else {
-		if(ki) cputsxy(8,0, "computer is thinking...   ");
-		else cputsxy(8,0, "active player: player 2");
+		if(ki) cputsxy(     31,0, "thinking");
+		else cputsxy(       31,0, "player 2");
 	}
 	sprintf(buf, "move  %-3i", move);
-	cputsxy(16,24, buf);
+	cputsxy(31,10, buf);
 }
 

@@ -7,7 +7,7 @@
 #define VICBANKBITMAP 3
 
 // definitions of field screen position and color
-#define FIELDOFF 87
+#define FIELDOFF 0
 #define FIELDCOLOR 11
 
 // definitions for player sprites in HUD

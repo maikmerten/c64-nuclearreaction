@@ -109,15 +109,15 @@ _play_music: .byte 1
 _init_music: .byte 1
 
 ; some assembler variables for setting up the sprite-based game field
-row0 = 75
-row_inc = 32
+row0 = 55
+row_inc = 40
 row1 = row0 + 1 * row_inc
 row2 = row0 + 2 * row_inc
 row3 = row0 + 3 * row_inc
 row4 = row0 + 4 * row_inc
 
-col0 = 88
-col_inc = 32
+col0 = 28
+col_inc = 40
 
 
 .proc _colorwash: near
